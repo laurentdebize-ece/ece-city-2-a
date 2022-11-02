@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include "graphe.h"
 
 #define nbLignes 35
 #define nbColonnes 45
@@ -23,18 +26,16 @@ void creerTableau(char **plateau){
     }
 }
 
-
-
 void saisir_coordonnees(int *x, int *y,char* element)
 {
     printf("Saisissez des coordonnees :\n");
     int ret, continuer;
     do{
         continuer = 0;
-        printf("x : ");
+        printf("x : \n");
         ret = scanf("%d", x);
 
-        if(ret != 1 || *x <= 0 || *y >= 35)
+        if(ret != 1 || *x <= 0 || *x >= 35)
             continuer = 1;
 
         while(ret != '\n' && ret != EOF)  // vide le buffer
@@ -44,7 +45,7 @@ void saisir_coordonnees(int *x, int *y,char* element)
 
     do{
         continuer = 0;
-        printf("y : ");
+        printf("y : \n");
         ret = scanf("%d", y);
         //*y = modifier
 
@@ -58,7 +59,7 @@ void saisir_coordonnees(int *x, int *y,char* element)
 
     do{
         continuer = 0;
-        printf("element : ");
+        printf("element : \n");
         ret = scanf("%c", element);
 
         if(ret != 1)
@@ -71,7 +72,6 @@ void saisir_coordonnees(int *x, int *y,char* element)
 
 }
 
-
 void placer_bloc(char **plateau, char element, int x, int y){
     if(element == 'r' || element == 'R'){
         plateau[x-1][y-1] = -36;
@@ -81,9 +81,34 @@ void placer_bloc(char **plateau, char element, int x, int y){
         plateau[x-2][y-1] = 'M', plateau[x-2][y] = 'M', plateau[x-2][y+1] = 'M',
         plateau[x-3][y-1] = 'M' ,plateau[x-3][y] = 'M', plateau[x-3][y+1] = 'M';
     }
+    else if(element == 'c' || element == 'C'){
+        plateau[x-1][y-1] = 'C', plateau[x-1][y] = 'C', plateau[x-1][y+1] = 'C', plateau[x-1][y+2] = 'C', plateau[x-1][y+3] = 'C', plateau[x-1][y+4] = 'C',
+        plateau[x-2][y-1] = 'C', plateau[x-2][y] = 'C', plateau[x-2][y+1] = 'C', plateau[x-2][y+2] = 'C', plateau[x-2][y+3] = 'C', plateau[x-2][y+4] = 'C',
+        plateau[x-3][y-1] = 'C' ,plateau[x-3][y] = 'C', plateau[x-3][y+1] = 'C', plateau[x-3][y+2] = 'C', plateau[x-3][y+3] = 'C', plateau[x-3][y+4] = 'C',
+        plateau[x-4][y-1] = 'C' ,plateau[x-4][y] = 'C', plateau[x-4][y+1] = 'C', plateau[x-4][y+2] = 'C', plateau[x-4][y+3] = 'C', plateau[x-4][y+4] = 'C';
+    }
     //plateau[x-1][y-1] = element;
 }
 
+void valid_coordonnees(int x, int y, char element, char** plateau){
+
+    int verif = 0;
+
+    while (verif != 1){
+        if((element == 'm' || element == 'M') && x < 3){
+            saisir_coordonnees(&x,&y,&element);
+            //placer_bloc(plateau, element, x, y);
+        }
+        else if((element == 'c' || element == 'C') && x < 4){
+            saisir_coordonnees(&x,&y,&element);
+            //placer_bloc(plateau, element, x, y);
+        }
+        else{
+            placer_bloc(plateau, element, x, y);
+            verif = 1;
+        }
+    }
+}
 
 void afficherPlateau(char **plateau){
     int i, j;
@@ -115,12 +140,19 @@ void free_plateau(char **plateau)
 }
 
 
+void compteur(){     // A MODIFIER POUR LES CYCLES
+    clock_t temps;
+    srand(time(NULL));
+    temps = clock();
+    printf("%f", (double)temps/CLOCKS_PER_SEC);
+}
+
 
 int main(){
 
     char ** plateau=NULL;
     int x = 0, y = 0;
-    char element = -36;
+    char element;
 
     AllouerTableau(&plateau);
     //printf("%c", -36); servira à créer la route
@@ -128,12 +160,23 @@ int main(){
     creerTableau(plateau);
 
     saisir_coordonnees(&x,&y,&element);
-    placer_bloc(plateau, element,x,y);
+    valid_coordonnees(x, y, element, plateau);
 
-    //plateau[5][6] = 'M';
-    //plateau[6][6] = -36;
+
+    /*
+    Graphe * g=lire_graphe("graphe1_TP2.txt");  // AJOUTER LE BON FICHIER TXT
+    int s0;
+    int *preds=(int*)malloc(g->ordre*sizeof(int));
+    viabilite(g,preds,s0);
+     */
+
+
+
     afficherPlateau(plateau);
     free_plateau(plateau);
+
+    compteur();  // PERMET D'AFFICHER LE TEMPS QUE DURE LE PROGRAMME. A MODIFIER POUR LES CYCLES!!!!
+
     return 0;
 
 }

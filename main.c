@@ -9,7 +9,6 @@ int main() {
     int ordreDeConstruction = 0;
     char **plateau = NULL;
     int x = 0, y = 0, i = 0;
-    char element;
 
     int choix = 0;
 
@@ -20,9 +19,9 @@ int main() {
 
     creerTableau(plateau);
 
-    afficherPlateau(plateau);
-
     afficherBoite(joueur, construction, &i, plateau);
+
+    //afficherPlateau(plateau);
 
     /*while (choix != 1) {
         saisir_coordonnees(&x, &y, &element);

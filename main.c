@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <time.h>
-#include "graphe.h"
 
 #define nbLignes 35
 #define nbColonnes 45
@@ -35,7 +33,7 @@ void saisir_coordonnees(int *x, int *y,char* element)
         printf("x : \n");
         ret = scanf("%d", x);
 
-        if(ret != 1 || *x <= 0 || *x >= 36)
+        if(ret != 1 || *x <= 0 || *x > 35)
             continuer = 1;
 
         while(ret != '\n' && ret != EOF)  // vide le buffer
@@ -49,7 +47,7 @@ void saisir_coordonnees(int *x, int *y,char* element)
         ret = scanf("%d", y);
         //*y = modifier
 
-        if(ret != 1 || *y <= 0 || *y >= 46)
+        if(ret != 1 || *y <= 0 || *y > 45)
             continuer = 1;
 
         while(ret != '\n' && ret != EOF)  // vide le buffer
@@ -151,6 +149,7 @@ void afficherPlateau(char **plateau){
     printf("           5         10        15        20        25        30        35        40        45\n");
     for(i = 0; i < nbLignes; i++)
     {
+
         if(i+1<10){
             printf("%d  ",i+1);
         }
@@ -160,7 +159,6 @@ void afficherPlateau(char **plateau){
 
         for(j = 0; j < nbColonnes; j++){
             printf("%c ", plateau[i][j]);
-            //printf("%c ", '.');
         }
         printf("\n");
     }
@@ -181,7 +179,6 @@ void compteur(){     // A MODIFIER POUR LES CYCLES
     printf("%f", (double)temps/CLOCKS_PER_SEC);
 }
 
-
 int main(){
 
     char ** plateau=NULL;
@@ -201,22 +198,6 @@ int main(){
         printf("Veux-tu placer un autre element ? (0 : oui, 1 : non)\n");
         scanf("%d", &choix);
     }
-
-/*
-    printf(" x: %d, y : %d\n", x, y);
-
-    printf("plateau en 1,1 : %c\n", plateau[1][1]);
-
-    printf(" plateau en 5,6 : %c\n", plateau[5][6]);
-    printf(" plateau en 5,7 : %c\n", plateau[5][7]);
-    printf(" plateau en 5,8 : %c\n", plateau[5][8]);
-    printf(" plateau en 4,6 : %c\n", plateau[4][6]);
-    printf(" plateau en 4,7 : %c\n", plateau[4][7]);
-    printf(" plateau en 4,8 : %c\n", plateau[4][8]);
-    printf(" plateau en 3,6 : %c\n", plateau[3][6]);
-    printf(" plateau en 3,7 : %c\n", plateau[3][7]);
-    printf(" plateau en 3,8 : %c\n", plateau[3][8]);
-    printf(" plateau en 2,6 : %c\n", plateau[2][6]);*/
 
 
     /*

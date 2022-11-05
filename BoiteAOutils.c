@@ -156,15 +156,13 @@ void valid_coordonnees_boite(int x, int y, int choix, char **plateau) {
     int verif = 0;
 
     while (verif != 1) {
-        if ((choix == 4) && x < 3) {
+        if ((choix == 4) && (x < 3 || y > 43)) {
             saisir_coordonnees_boite(&x, &y);
-            //placer_bloc(plateau, element, x, y);
-        } else if ((choix == 2 || choix == 3) && x < 4) {
+        } else if ((choix == 2 || choix == 3) && (x < 4 || y > 40)) {
             saisir_coordonnees_boite(&x, &y);
-            //placer_bloc(plateau, element, x, y);
         } else {
-            placer_bloc_boite(plateau, choix, x, y);
             verif = 1;
+            verif_chevauchement_boite(plateau, choix, x, y);
         }
     }
 }

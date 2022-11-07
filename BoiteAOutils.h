@@ -5,26 +5,26 @@
 #include <windows.h>
 #include "GrilleDeJeu.h"
 
-typedef struct DonneesJoueur {
+typedef struct DonneesJoueur2 {
     int compteurTemps;
     int compteurMonnaie;
     int nombreDHabitants;
     int capaciteEau;
     int capaciteElectrique;
-} DonneesJoueur;
+} DonneesJoueur2;
 
-typedef struct Construction {
+typedef struct Construction2 {
     int batiment;
     int cout;
     int revenu;
     int nombreDHabitant;
-} Construction;
+} Construction2;
 
 void color(int couleurDuTexte, int couleurDeFond);
 
-DonneesJoueur initialisationJoueur(DonneesJoueur joueur);
+DonneesJoueur initialisationJoueur2(DonneesJoueur joueur);
 
-void initialisationConstruction(Construction construction);
+void initialisationConstruction2(Construction construction);
 
 void saisir_coordonnees_boite(int *x, int *y);
 
@@ -38,12 +38,12 @@ int choixBoite();
 
 void afficherBoite(DonneesJoueur joueur, Construction construction[nbCases], int *i, char **plateau);
 
-void route(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau);
+void route2(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau);
 
-void chateauDeau(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau);
+void chateauDeau2(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau);
 
-void centraleElectrique(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau);
+void centraleElectrique2(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau);
 
-void terrainVague(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau);
+void terrainVague2(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau);
 
 #endif //ECE_CITY_2_A_BOITEAOUTILS_H

@@ -1,48 +1,57 @@
 #include "GrilleDeJeu.h"
-#include "BoiteAOutils.h"
 
-int main() {
+int main(){
+
+    char ** plateau=NULL;
+    int x = 0, y = 0;
+    int choix = 0;
+    int choix2 = 0;
+    FILE* fichier = NULL;
 
     DonneesJoueur joueur;
+    Construction construction[nbCases];
+    int i = 0;
     joueur.compteurMonnaie = 0;
-    Construction construction[nbCases]; //Faire une allocation dynamique ?
-    int ordreDeConstruction = 0;
-    char **plateau = NULL;
-    int x = 0, y = 0, i = 0;
-
-    int choix = 0;
-
-    joueur = initialisationJoueur(joueur);
-    initialisationConstruction(*construction);
+    initialisationJoueur(joueur);
 
     AllouerTableau(&plateau);
 
     creerTableau(plateau);
+    afficherPlateau(plateau);
+    afficherMenu();
 
-    afficherBoite(joueur, construction, &i, plateau);
-
-    //afficherPlateau(plateau);
-
-    /*while (choix != 1) {
-        saisir_coordonnees(&x, &y, &element);
-        valid_coordonnees(x, y, element, plateau);
-        afficherPlateau(plateau);
-        printf("Veux-tu placer un autre element ? (0 : oui, 1 : non)\n");
-        scanf("%d", &choix);
-    }*/
-
-
-    /*
-    Graphe * g=lire_graphe("graphe1_TP2.txt");  // AJOUTER LE BON FICHIER TXT
-    int s0;
-    int *preds=(int*)malloc(g->ordre*sizeof(int));
-    viabilite(g,preds,s0);
-     */
+    while (choix != '4'){
+        fflush (stdout);
+        if(kbhit())
+        {
+            choix=getch();
+            switch (choix) {
+                case '1' :{
+                    printf("choix 1 : restaurer une sauvegarde\n");
+                    lire_fichier_grille(fichier, "save.txt", plateau);
+                    afficherPlateau(plateau);
+                    afficherMenu();
+                    break;
+                }
+                case '2' :{
+                    printf("choix 2 : sauvegarder la partie en cours \n");
+                    save_grille(fichier, "save.txt", plateau);
+                    afficherPlateau(plateau);
+                    afficherMenu();
+                    break;
+                }
+                case '3' :{
+                    printf("choix 3 : ajouter un element \n");
+                    choixElement();
+                    afficherElement(plateau, choix2, x, y, joueur, construction, &i);
+                    afficherPlateau(plateau);
+                    afficherMenu();
+                }
+            }
+        }
+    }
 
     free_plateau(plateau);
 
-    compteur();  // PERMET D'AFFICHER LE TEMPS QUE DURE LE PROGRAMME. A MODIFIER POUR LES CYCLES!!!!
-
     return 0;
-
 }

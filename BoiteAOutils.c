@@ -7,14 +7,14 @@ void color(int couleurDuTexte, int couleurDeFond) {
     SetConsoleTextAttribute(H, couleurDeFond * 16 + couleurDuTexte);
 }
 
-DonneesJoueur initialisationJoueur(DonneesJoueur joueur) {
+DonneesJoueur initialisationJoueur2(DonneesJoueur joueur) {
     joueur.compteurMonnaie = 500000;
     return joueur;
 }
 
 ///PROBLEME DANS LES INITIALISATIONS DE CONSTRUCTION MAIS NE GÊNE PAS POUR LE MOMENT
 //Il faudra sûrement faire un tableau de construction, mais je ne sais pas encore
-void initialisationConstruction(Construction construction) {
+void initialisationConstruction2(Construction construction) {
     if (construction.batiment == 1) { // Château d'eau
         construction.cout = 100000;
         construction.revenu = 0;
@@ -192,25 +192,25 @@ int choixboite() {
 void afficherBoite(DonneesJoueur joueur, Construction construction[nbCases], int *i, char **plateau) {
     switch (choixboite()) {
         case 1 : {
-            route(joueur, construction, i, 1, plateau);
+            route2(joueur, construction, i, 1, plateau);
             afficherPlateau(plateau);
             afficherBoite(joueur, construction, i, plateau);
             break;
         }
         case 2 : {
-            chateauDeau(joueur, construction, i, 2, plateau);
+            chateauDeau2(joueur, construction, i, 2, plateau);
             afficherPlateau(plateau);
             afficherBoite(joueur, construction, i, plateau);
             break;
         }
         case 3 : {
-            centraleElectrique(joueur, construction, i, 3, plateau);
+            centraleElectrique2(joueur, construction, i, 3, plateau);
             afficherPlateau(plateau);
             afficherBoite(joueur, construction, i, plateau);
             break;
         }
         case 4 : {
-            terrainVague(joueur, construction, i, 4, plateau);
+            terrainVague2(joueur, construction, i, 4, plateau);
             afficherPlateau(plateau);
             afficherBoite(joueur, construction, i, plateau);
             break;
@@ -220,7 +220,7 @@ void afficherBoite(DonneesJoueur joueur, Construction construction[nbCases], int
 
 //Faire une fonction d'affichage qui renseigne sur les prix de chaque construction
 
-void route(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau) {
+void route2(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau) {
     construction[*i].batiment = 8;
     int x = 0, y = 0, choix;
     choix = 1;
@@ -238,7 +238,7 @@ void route(DonneesJoueur joueur, Construction construction[nbCases], int *i, int
     } while (choix == 1);
 }
 
-void chateauDeau(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau) {
+void chateauDeau2(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau) {
     construction[*i].batiment = 1;
     int x = 0, y = 0, choix;
     choix = 1;
@@ -258,7 +258,7 @@ void chateauDeau(DonneesJoueur joueur, Construction construction[nbCases], int *
     } while (choix == 1);
 }
 
-void centraleElectrique(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau) {
+void centraleElectrique2(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau) {
     construction[*i].batiment = 2;
     int x = 0, y = 0, choix;
     choix = 1;
@@ -278,7 +278,7 @@ void centraleElectrique(DonneesJoueur joueur, Construction construction[nbCases]
     } while (choix == 1);
 }
 
-void terrainVague(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau) {
+void terrainVague2(DonneesJoueur joueur, Construction construction[nbCases], int *i, int objetAPlacer, char **plateau) {
     construction[*i].batiment = 3;
     int x = 0, y = 0, choix;
     choix = 1;

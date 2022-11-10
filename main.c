@@ -1,48 +1,66 @@
 #include "GrilleDeJeu.h"
-#include "BoiteAOutils.h"
 
-int main() {
+int main(){
+    //Affichage console en mode pleine ecran
+    keybd_event(VK_MENU,0x38,0,0); //Appuie sur ALT
+    keybd_event(VK_RETURN,0x1c,0,0); //Appuie ENTREE
+    keybd_event(VK_RETURN,0x1c,KEYEVENTF_KEYUP,0); // Relache ENTREE
+    keybd_event(VK_MENU,0x38,KEYEVENTF_KEYUP,0); //Relache ALT
+    //Fin Affichage console en mode pleine ecran
+
+    char ** plateau=NULL;
+    int x = 0, y = 0;
+    int choix = 0;
+    int choix2 = 0;
+    FILE* fichier = NULL;
 
     DonneesJoueur joueur;
+    Construction construction[nbCases];
+    int i = 0;
     joueur.compteurMonnaie = 0;
-    Construction construction[nbCases]; //Faire une allocation dynamique ?
-    int ordreDeConstruction = 0;
-    char **plateau = NULL;
-    int x = 0, y = 0, i = 0;
-
-    int choix = 0;
-
-    joueur = initialisationJoueur(joueur);
-    initialisationConstruction(*construction);
+    initialisationJoueur(joueur);
 
     AllouerTableau(&plateau);
 
     creerTableau(plateau);
+    afficherPlateau(plateau);
+    afficherPlateau(plateau); // bug clion suite à maj windows donc appelle 2 fois de suite la meme fonction
 
-    afficherBoite(joueur, construction, &i, plateau);
+    afficherMenu();
+    afficherRessource(joueur);
 
-    //afficherPlateau(plateau);
-
-    /*while (choix != 1) {
-        saisir_coordonnees(&x, &y, &element);
-        valid_coordonnees(x, y, element, plateau);
-        afficherPlateau(plateau);
-        printf("Veux-tu placer un autre element ? (0 : oui, 1 : non)\n");
-        scanf("%d", &choix);
-    }*/
-
-
-    /*
-    Graphe * g=lire_graphe("graphe1_TP2.txt");  // AJOUTER LE BON FICHIER TXT
-    int s0;
-    int *preds=(int*)malloc(g->ordre*sizeof(int));
-    viabilite(g,preds,s0);
-     */
-
+    while (choix != '4'){
+        fflush (stdout);
+        if(kbhit())
+        {
+            choix=getch();
+            switch (choix) {
+                case '1' :{
+                    lire_fichier_grille(fichier, "grille.txt", plateau);
+                    afficherPlateau(plateau);
+                    afficherMenu();
+                    afficherRessource(joueur);
+                    break;
+                }
+                case '2' :{
+                    save_grille(fichier, "grille.txt", plateau);
+                    afficherPlateau(plateau);
+                    afficherMenu();
+                    afficherRessource(joueur);
+                    break;
+                }
+                case '3' :{
+                    choixElement();
+                    afficherElement(plateau, choix2, x, y, joueur, construction, &i);
+                    afficherPlateau(plateau);
+                    afficherMenu();
+                    afficherRessource(joueur);
+                }
+            }
+        }
+    }
+    locate(100,36);
     free_plateau(plateau);
 
-    compteur();  // PERMET D'AFFICHER LE TEMPS QUE DURE LE PROGRAMME. A MODIFIER POUR LES CYCLES!!!!
-
     return 0;
-
 }

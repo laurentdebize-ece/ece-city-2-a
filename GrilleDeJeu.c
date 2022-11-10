@@ -1,5 +1,15 @@
 #include "GrilleDeJeu.h"
 
+
+void locate(int x,int y)
+{
+    HANDLE H=GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD C;
+    C.X=x;
+    C.Y=y;
+    SetConsoleCursorPosition(H,C);
+}
+
 void AllouerTableau(char ***plateau) {
     *plateau = malloc(nbLignes * sizeof(char *));
     for (int i = 0; i < nbLignes; i++)
@@ -18,11 +28,14 @@ void creerTableau(char **plateau) {
 }
 
 void saisir_coordonnees(int *x, int *y) {
+    locate(100,18);
     printf("Saisissez des coordonnees :\n");
     int ret, continuer;
     do{
         continuer = 0;
+        locate(100,19);
         printf("x : \n");
+        locate(100,20);
         ret = scanf("%d", x);
 
         if(ret != 1 || *x <= 0 || *x > 35)
@@ -35,7 +48,9 @@ void saisir_coordonnees(int *x, int *y) {
 
     do{
         continuer = 0;
+        locate(100,21);
         printf("y : \n");
+        locate(100,22);
         ret = scanf("%d", y);
         //*y = modifier
 
@@ -48,6 +63,7 @@ void saisir_coordonnees(int *x, int *y) {
     }while(continuer);
 
 }
+
 
 void placer_bloc(char **plateau,int choix, int x, int y) {
     if(choix == 1){
@@ -141,6 +157,8 @@ void valid_coordonnees(int x, int y, int choix, char** plateau) {
 void afficherPlateau(char **plateau) {
     int i, j;
     printf("\n");
+    system("cls");
+    locate(1,1);
     printf("           5         10        15        20        25        30        35        40        45\n");
     for (i = 0; i < nbLignes; i++) {
 
@@ -180,22 +198,22 @@ void lire_fichier_grille(FILE* fichier, char* save, char** plateau) {
 
     if (fichier != NULL)
     {
-        // Boucle de lecture des caractères un à un
+        // Boucle de lecture des caract�res un � un
         do
         {
 
             if(j < (nbColonnes)){
-                element = fgetc(fichier); // On lit le caractère vide entre chaque valeur
-                element = fgetc(fichier); // On lit le caractère
+                element = fgetc(fichier); // On lit le caract�re vide entre chaque valeur
+                element = fgetc(fichier); // On lit le caract�re
                 plateau[i][j] = element;
                 j++;
             }
             else{
-                element = fgetc(fichier); // On lit le caractère vide apres le saut de ligne
+                element = fgetc(fichier); // On lit le caract�re vide apres le saut de ligne
                 j = 0;
                 i++;
             }
-        } while (element != EOF); // On continue tant que fgetc n'a pas retourné EOF (fin de fichier)
+        } while (element != EOF); // On continue tant que fgetc n'a pas retourn� EOF (fin de fichier)
 
         fclose(fichier);
 
@@ -234,23 +252,39 @@ void save_grille(FILE* fichier, char* save, char** plateau) {
 }
 
 void afficherMenu() {
-    //int i, j;
-    printf("\n");
+    int i, j;
+    //printf("\n");
+    locate(100,2);
     printf("Quelle action voulez vous realiser : \n");
+    locate(100,3);
+    printf("- (-1) : Affichage niveau -1   ");
+    locate(100,4);
+    printf("- (-2) : Affichage niveau -2   ");
+    locate(100,5);
     printf("- 1 : restaurer une sauvegarde \n");
+    locate(100,6);
     printf("- 2 : sauvegarder la partie en cours \n");
+    locate(100,7);
     printf("- 3 : ajouter un element \n");
+    locate(100,8);
     printf("- 4 : Sortir du jeux \n");
+    locate(100,9);
 
 }
 
 void choixElement() {
-    printf("\n");
+    //printf("\n");
+    locate(100,11);
     printf("Quelle element voulez-vous placer ? \n");
+    locate(100,12);
     printf("- 1 : route \n");
+    locate(100,13);
     printf("- 2 : terrain vide \n");
+    locate(100,14);
     printf("- 3 : centrale electrique \n");
+    locate(100,15);
     printf("- 4 : chateau d'eau \n");
+    locate(100,16);
 }
 
 DonneesJoueur initialisationJoueur(DonneesJoueur joueur) {
@@ -259,12 +293,12 @@ DonneesJoueur initialisationJoueur(DonneesJoueur joueur) {
 }
 
 void initialisationConstruction(Construction construction) {
-    if (construction.batiment == 1) { // Château d'eau
+    if (construction.batiment == 1) { // Ch�teau d'eau
         construction.cout = 100000;
         construction.revenu = 0;
         construction.nombreDHabitant = 0;
     }
-    if (construction.batiment == 2) { // Centrale électrique
+    if (construction.batiment == 2) { // Centrale �lectrique
         construction.cout = 100000;
         construction.revenu = 0;
         construction.nombreDHabitant = 0;
@@ -305,14 +339,34 @@ void route(char** plateau, int choix, int x, int y, DonneesJoueur joueur, Constr
     choix = 1;
     do {
         if(joueur.compteurMonnaie >= construction[*i].cout){
+            locate(100,20);
+            printf("                                            ");
+            locate(100,21);
+            printf("                                            ");
+            locate(100,22);
+            printf("                                            ");
+            locate(100,23);
+            printf("                                            ");
+            locate(100,24);
+            printf("                                            ");
+            locate(100,25);
+            printf("                                            ");
             saisir_coordonnees(&x, &y);
             valid_coordonnees(x, y, choix, plateau);
+            locate(100,23);
             printf("Souhaitez-vous placer une autre route ?\n\r");
+            locate(100,24);
             printf("(1) Oui      (2) Non\n\r");
+            locate(100,25);
             scanf("%d", &choix);
+            locate(100,23);
+            printf("                                            ");
+            locate(100,24);
+            printf("                                            ");
         }
         else{
-            printf("Désolé ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
+            locate(100,23);
+            printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
         }
     } while (choix == 1);
 }
@@ -323,7 +377,8 @@ void terrainVague(char** plateau, int choix, int x, int y, DonneesJoueur joueur,
         valid_coordonnees(x, y, choix, plateau);
     }
     else{
-        printf("Désolé ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
+        locate(100,23);
+        printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
     }
 }
 
@@ -333,16 +388,19 @@ void chateauDeau(char** plateau, int choix, int x, int y, DonneesJoueur joueur, 
         valid_coordonnees(x, y, choix, plateau);
     }
     else{
-        printf("Désolé ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
+        locate(100,23);
+        printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
     }
 }
+
 void centraleElectrique(char** plateau, int choix, int x, int y, DonneesJoueur joueur, Construction construction[nbCases], int* i) {
     if(joueur.compteurMonnaie >= construction[*i].cout){
         saisir_coordonnees(&x, &y);
         valid_coordonnees(x, y, choix, plateau);
     }
     else{
-        printf("Désolé ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
+        locate(100,23);
+        printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
     }
 }
 
@@ -366,4 +424,17 @@ void afficherElement(char** plateau, int choix, int x, int y, DonneesJoueur joue
             break;
         }
     }
+}
+
+void afficherRessource(DonneesJoueur joueur){
+    locate(100,30);
+    printf(" Compteur temporel :     ");
+    locate(100,31);
+    printf(" Monnaie :  %d   ",joueur.compteurMonnaie);
+    locate(100,32);
+    printf(" Habitants :     ");
+    locate(100,33);
+    printf(" Capacite electrique :     ");
+    locate(100,34);
+    printf(" Capacite en eau :     ");
 }

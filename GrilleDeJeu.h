@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <conio.h>
+#include <windows.h>
 
 typedef struct DonneesJoueur {
     int compteurTemps;
@@ -37,6 +38,7 @@ void compteur();
 void lire_fichier_grille(FILE* fichier, char* save, char** plateau);
 void save_grille(FILE* fichier, char* save, char** plateau);
 void afficherMenu();
+void afficherRessource(DonneesJoueur joueur);
 
 void choixElement();
 DonneesJoueur initialisationJoueur(DonneesJoueur joueur);

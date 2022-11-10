@@ -1,6 +1,12 @@
 #include "GrilleDeJeu.h"
 
 int main(){
+    //Affichage console en mode pleine ecran
+    keybd_event(VK_MENU,0x38,0,0); //Appuie sur ALT
+    keybd_event(VK_RETURN,0x1c,0,0); //Appuie ENTREE
+    keybd_event(VK_RETURN,0x1c,KEYEVENTF_KEYUP,0); // Relache ENTREE
+    keybd_event(VK_MENU,0x38,KEYEVENTF_KEYUP,0); //Relache ALT
+    //Fin Affichage console en mode pleine ecran
 
     char ** plateau=NULL;
     int x = 0, y = 0;
@@ -18,7 +24,10 @@ int main(){
 
     creerTableau(plateau);
     afficherPlateau(plateau);
+    afficherPlateau(plateau); // bug clion suite à maj windows donc appelle 2 fois de suite la meme fonction
+
     afficherMenu();
+    afficherRessource(joueur);
 
     while (choix != '4'){
         fflush (stdout);
@@ -27,30 +36,30 @@ int main(){
             choix=getch();
             switch (choix) {
                 case '1' :{
-                    printf("choix 1 : restaurer une sauvegarde\n");
-                    lire_fichier_grille(fichier, "save.txt", plateau);
+                    lire_fichier_grille(fichier, "grille.txt", plateau);
                     afficherPlateau(plateau);
                     afficherMenu();
+                    afficherRessource(joueur);
                     break;
                 }
                 case '2' :{
-                    printf("choix 2 : sauvegarder la partie en cours \n");
-                    save_grille(fichier, "save.txt", plateau);
+                    save_grille(fichier, "grille.txt", plateau);
                     afficherPlateau(plateau);
                     afficherMenu();
+                    afficherRessource(joueur);
                     break;
                 }
                 case '3' :{
-                    printf("choix 3 : ajouter un element \n");
                     choixElement();
                     afficherElement(plateau, choix2, x, y, joueur, construction, &i);
                     afficherPlateau(plateau);
                     afficherMenu();
+                    afficherRessource(joueur);
                 }
             }
         }
     }
-
+    locate(100,36);
     free_plateau(plateau);
 
     return 0;

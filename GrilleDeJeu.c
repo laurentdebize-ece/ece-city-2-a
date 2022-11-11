@@ -1,5 +1,30 @@
 #include "GrilleDeJeu.h"
 
+DonneesJoueur initialisationJoueur(DonneesJoueur *joueur) {
+    joueur->compteurMonnaie = 500000;
+    return *joueur;
+}
+
+void initialisationConstruction(Construction *construction) {
+    if (construction->choixBatiment == 1){
+        construction->cout = 10;
+    }
+    else if (construction->choixBatiment == 2){
+        construction->cout = 1000;
+    }
+    else if (construction->choixBatiment == 3){
+        construction->cout = 100000;
+    }
+    else if (construction->choixBatiment == 4){
+        construction->cout = 100000;
+    }
+}
+
+int argentJoueur(DonneesJoueur *joueur, Construction *construction) {
+    initialisationConstruction(construction);
+    return joueur->compteurMonnaie = joueur->compteurMonnaie - construction->cout;
+}
+
 
 void locate(int x,int y)
 {
@@ -65,40 +90,44 @@ void saisir_coordonnees(int *x, int *y) {
 }
 
 
-void placer_bloc(char **plateau,int choix, int x, int y) {
-    if(choix == 1){
+void placer_bloc(char **plateau, int x, int y, Construction *construction, DonneesJoueur *joueur) {
+    if(construction->choixBatiment == 1){
         plateau[x-1][y-1] = -36;
+        argentJoueur(joueur, construction);
     }
-    else if(choix == 2){
+    else if(construction->choixBatiment == 2){
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 plateau[x-i-1][y+j-1] = 'M';
             }
         }
+        argentJoueur(joueur, construction);
     }
-    else if(choix == 3){
+    else if(construction->choixBatiment == 3){
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 6; j++) {
                 plateau[x-i-1][y+j-1] = 'U';
             }
         }
+        argentJoueur(joueur, construction);
     }
-    else if(choix == 4){
+    else if(construction->choixBatiment == 4){
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 6; j++) {
                 plateau[x-i-1][y+j-1] = 'C';
             }
         }
+        argentJoueur(joueur, construction);
     }
 }
 
-void verif_chevauchement(char** plateau, int choix, int x, int y) {
+void verif_chevauchement(char** plateau, int x, int y, Construction *construction, DonneesJoueur *joueur) {
 
     int verif = 0;
 
     int tailleX, tailleY = 0;
 
-    switch (choix) {
+    switch (construction->choixBatiment) {
         case 1 :{
             tailleX = 1;
             tailleY = 1;
@@ -129,27 +158,27 @@ void verif_chevauchement(char** plateau, int choix, int x, int y) {
     }
     if(verif == 1){
         saisir_coordonnees(&x, &y);
-        verif_chevauchement(plateau,choix, x, y);
+        verif_chevauchement(plateau, x, y, construction, joueur);
     }
     else{
-        placer_bloc(plateau,choix,x,y);
+        placer_bloc(plateau,x,y, construction, joueur);
     }
 }
 
-void valid_coordonnees(int x, int y, int choix, char** plateau) {
+void valid_coordonnees(int x, int y, char** plateau, Construction *construction, DonneesJoueur *joueur) {
 
     int verif = 0;
 
     while (verif != 1){
-        if(((choix == 2) && (x < 3 || y > 43))){
+        if(((construction->choixBatiment == 2) && (x < 3 || y > 43))){
             saisir_coordonnees(&x,&y);
         }
-        else if((choix == 3 || choix == 4) && (x < 4 || y > 40)){
+        else if((construction->choixBatiment == 3 || construction->choixBatiment == 4) && (x < 4 || y > 40)){
             saisir_coordonnees(&x,&y);
         }
         else{
             verif = 1;
-            verif_chevauchement(plateau,choix, x, y);
+            verif_chevauchement(plateau, x, y, construction, joueur);
         }
     }
 }
@@ -159,7 +188,7 @@ void afficherPlateau(char **plateau) {
     printf("\n");
     system("cls");
     locate(1,1);
-    printf("           5         10        15        20        25        30        35        40        45\n");
+    printf("          5         10        15        20        25        30        35        40        45\n");
     for (i = 0; i < nbLignes; i++) {
 
         if (i + 1 < 10) {
@@ -287,58 +316,10 @@ void choixElement() {
     locate(100,16);
 }
 
-DonneesJoueur initialisationJoueur(DonneesJoueur joueur) {
-    joueur.compteurMonnaie = 500000;
-    return joueur;
-}
-
-void initialisationConstruction(Construction construction) {
-    if (construction.batiment == 1) { // Ch�teau d'eau
-        construction.cout = 100000;
-        construction.revenu = 0;
-        construction.nombreDHabitant = 0;
-    }
-    if (construction.batiment == 2) { // Centrale �lectrique
-        construction.cout = 100000;
-        construction.revenu = 0;
-        construction.nombreDHabitant = 0;
-    }
-    if (construction.batiment == 3) { // Terrain Vague ou Ruine
-        construction.cout = 1000;
-        construction.revenu = 0;
-        construction.nombreDHabitant = 0;
-    }
-    if (construction.batiment == 4) { // Cabane
-        construction.cout = 0;
-        construction.revenu = 100;
-        construction.nombreDHabitant = 10;
-    }
-    if (construction.batiment == 5) { // Maison
-        construction.cout = 0;
-        construction.revenu = 500;
-        construction.nombreDHabitant = 50;
-    }
-    if (construction.batiment == 6) { // Immeuble
-        construction.cout = 0;
-        construction.revenu = 1000;
-        construction.nombreDHabitant = 100;
-    }
-    if (construction.batiment == 7) { // Gratte-ciel
-        construction.cout = 0;
-        construction.revenu = 10000;
-        construction.nombreDHabitant = 1000;
-    }
-    if (construction.batiment == 8) { // Route
-        construction.cout = 10;
-        construction.revenu = 0;
-        construction.nombreDHabitant = 0;
-    }
-}
-
-void route(char** plateau, int choix, int x, int y, DonneesJoueur joueur, Construction construction[nbCases], int* i) {
+void route(char** plateau, int choix, int x, int y, DonneesJoueur *joueur, Construction *construction) {
     choix = 1;
     do {
-        if(joueur.compteurMonnaie >= construction[*i].cout){
+        if(joueur->compteurMonnaie >= construction->cout){
             locate(100,20);
             printf("                                            ");
             locate(100,21);
@@ -352,7 +333,7 @@ void route(char** plateau, int choix, int x, int y, DonneesJoueur joueur, Constr
             locate(100,25);
             printf("                                            ");
             saisir_coordonnees(&x, &y);
-            valid_coordonnees(x, y, choix, plateau);
+            valid_coordonnees(x, y, plateau, construction, joueur);
             locate(100,23);
             printf("Souhaitez-vous placer une autre route ?\n\r");
             locate(100,24);
@@ -371,10 +352,10 @@ void route(char** plateau, int choix, int x, int y, DonneesJoueur joueur, Constr
     } while (choix == 1);
 }
 
-void terrainVague(char** plateau, int choix, int x, int y, DonneesJoueur joueur, Construction construction[nbCases], int* i) {
-    if(joueur.compteurMonnaie >= construction[*i].cout){
+void terrainVague(char** plateau, int x, int y, DonneesJoueur *joueur, Construction *construction) {
+    if(joueur->compteurMonnaie >= construction->cout){
         saisir_coordonnees(&x, &y);
-        valid_coordonnees(x, y, choix, plateau);
+        valid_coordonnees(x, y, plateau, construction, joueur);
     }
     else{
         locate(100,23);
@@ -382,10 +363,10 @@ void terrainVague(char** plateau, int choix, int x, int y, DonneesJoueur joueur,
     }
 }
 
-void chateauDeau(char** plateau, int choix, int x, int y, DonneesJoueur joueur, Construction construction[nbCases], int* i) {
-    if(joueur.compteurMonnaie >= construction[*i].cout){
+void chateauDeau(char** plateau, int x, int y, DonneesJoueur *joueur, Construction *construction) {
+    if(joueur->compteurMonnaie >= construction->cout){
         saisir_coordonnees(&x, &y);
-        valid_coordonnees(x, y, choix, plateau);
+        valid_coordonnees(x, y, plateau, construction, joueur);
     }
     else{
         locate(100,23);
@@ -393,10 +374,10 @@ void chateauDeau(char** plateau, int choix, int x, int y, DonneesJoueur joueur, 
     }
 }
 
-void centraleElectrique(char** plateau, int choix, int x, int y, DonneesJoueur joueur, Construction construction[nbCases], int* i) {
-    if(joueur.compteurMonnaie >= construction[*i].cout){
+void centraleElectrique(char** plateau, int x, int y, DonneesJoueur *joueur, Construction *construction) {
+    if(joueur->compteurMonnaie >= construction->cout){
         saisir_coordonnees(&x, &y);
-        valid_coordonnees(x, y, choix, plateau);
+        valid_coordonnees(x, y, plateau, construction, joueur);
     }
     else{
         locate(100,23);
@@ -404,33 +385,33 @@ void centraleElectrique(char** plateau, int choix, int x, int y, DonneesJoueur j
     }
 }
 
-void afficherElement(char** plateau, int choix, int x, int y, DonneesJoueur joueur, Construction construction[nbCases], int* i) {
-    scanf("%d", &choix);
-    switch (choix) {
+void afficherElement(char** plateau, int choix, int x, int y, DonneesJoueur *joueur, Construction *construction) {
+    scanf("%d", &construction->choixBatiment);
+    switch (construction->choixBatiment) {
         case 1:{
-            route(plateau, choix, x, y, joueur, construction, i);
+            route(plateau, choix, x, y, joueur, construction);
             break;
         }
         case 2:{
-            terrainVague(plateau, choix, x, y, joueur, construction, i);
+            terrainVague(plateau, x, y, joueur, construction);
             break;
         }
         case 3:{
-            centraleElectrique(plateau, choix, x, y, joueur, construction, i);
+            centraleElectrique(plateau, x, y, joueur, construction);
             break;
         }
         case 4:{
-            chateauDeau(plateau, choix, x, y, joueur, construction, i);
+            chateauDeau(plateau, x, y, joueur, construction);
             break;
         }
     }
 }
 
-void afficherRessource(DonneesJoueur joueur){
+void afficherRessource(DonneesJoueur *joueur){
     locate(100,30);
     printf(" Compteur temporel :     ");
     locate(100,31);
-    printf(" Monnaie :  %d   ",joueur.compteurMonnaie);
+    printf(" Monnaie :  %d   ",joueur->compteurMonnaie);
     locate(100,32);
     printf(" Habitants :     ");
     locate(100,33);

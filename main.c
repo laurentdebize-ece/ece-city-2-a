@@ -15,10 +15,13 @@ int main(){
     FILE* fichier = NULL;
 
     DonneesJoueur joueur;
-    Construction construction[nbCases];
+    Construction construction;
     int i = 0;
     joueur.compteurMonnaie = 0;
-    initialisationJoueur(joueur);
+    initialisationJoueur(&joueur);
+
+    construction.cout = 0;
+    initialisationConstruction(&construction);
 
     AllouerTableau(&plateau);
 
@@ -27,7 +30,7 @@ int main(){
     afficherPlateau(plateau); // bug clion suite à maj windows donc appelle 2 fois de suite la meme fonction
 
     afficherMenu();
-    afficherRessource(joueur);
+    afficherRessource(&joueur);
 
     while (choix != '4'){
         fflush (stdout);
@@ -39,22 +42,22 @@ int main(){
                     lire_fichier_grille(fichier, "grille.txt", plateau);
                     afficherPlateau(plateau);
                     afficherMenu();
-                    afficherRessource(joueur);
+                    afficherRessource(&joueur);
                     break;
                 }
                 case '2' :{
                     save_grille(fichier, "grille.txt", plateau);
                     afficherPlateau(plateau);
                     afficherMenu();
-                    afficherRessource(joueur);
+                    afficherRessource(&joueur);
                     break;
                 }
                 case '3' :{
                     choixElement();
-                    afficherElement(plateau, choix2, x, y, joueur, construction, &i);
+                    afficherElement(plateau, choix2, x, y, &joueur, &construction);
                     afficherPlateau(plateau);
                     afficherMenu();
-                    afficherRessource(joueur);
+                    afficherRessource(&joueur);
                 }
             }
         }

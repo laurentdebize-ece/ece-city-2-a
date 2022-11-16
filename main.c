@@ -1,5 +1,36 @@
 #include "GrilleDeJeu.h"
 
+_Noreturn void compteurTemps() {
+    int h = 0, m = 0, s = 0, ms = 0;
+    while (TRUE) //or we can write 1 instead of TRUE
+    {
+        printf("       \r %2d : %2d : %2d ", h, m, s);//here \r is used to update the value in a single line
+        ms++;
+        Sleep(10);//it is approximately 1 millisecond
+        if (ms == 99) {
+            s++;
+            ms = 0;
+        }
+        if (s == 59) {
+            m++;
+            s = 0;
+            ms = 0;
+        }
+        if (m == 59) {
+            h++;
+            m = 0;
+            s = 0;
+            ms = 0;
+        }
+        if (h == 24) {
+            h = 0;
+            m = 0;
+            s = 0;
+            ms = 0;
+        }
+    }
+}
+
 int main(){
     //Affichage console en mode pleine ecran
     keybd_event(VK_MENU,0x38,0,0); //Appuie sur ALT

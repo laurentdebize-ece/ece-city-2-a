@@ -191,3 +191,6 @@ void viabilite(Graphe *graphe, int *preds, int s0) {
     printf("\n");
 
 }
+
+
+

@@ -1,4 +1,6 @@
-#include "GrilleDeJeu.h"
+#include "affichage.h"
+#include "compteur.h"
+
 
 int main(){
     //Affichage console en mode pleine ecran
@@ -8,22 +10,22 @@ int main(){
     keybd_event(VK_MENU,0x38,KEYEVENTF_KEYUP,0); //Relache ALT
     //Fin Affichage console en mode pleine ecran
 
-    char ** plateau=NULL;
-    int x = 0, y = 0;
+
+    int** sommet = NULL;
+    char** plateau = NULL;
     int choix = 0;
     int choix2 = 0;
     FILE* fichier = NULL;
 
     DonneesJoueur joueur;
     Construction construction;
-    int i = 0;
-    joueur.compteurMonnaie = 0;
-    initialisationJoueur(&joueur);
 
-    construction.cout = 0;
+    initialisationJoueur(&joueur);
     initialisationConstruction(&construction);
 
     AllouerTableau(&plateau);
+    AllouerSommet(&sommet);
+    InitialisationSommet(sommet);
 
     creerTableau(plateau);
     afficherPlateau(plateau);
@@ -31,6 +33,7 @@ int main(){
 
     afficherMenu();
     afficherRessource(&joueur);
+
 
     while (choix != '4'){
         fflush (stdout);
@@ -40,6 +43,7 @@ int main(){
             switch (choix) {
                 case '1' :{
                     lire_fichier_grille(fichier, "grille.txt", plateau);
+                    lire_DonneesJoueur("DonneesJoueur.txt", &joueur);
                     afficherPlateau(plateau);
                     afficherMenu();
                     afficherRessource(&joueur);
@@ -47,6 +51,7 @@ int main(){
                 }
                 case '2' :{
                     save_grille(fichier, "grille.txt", plateau);
+                    save_DonneesJoueur("DonneesJoueur.txt", &joueur);
                     afficherPlateau(plateau);
                     afficherMenu();
                     afficherRessource(&joueur);
@@ -54,10 +59,24 @@ int main(){
                 }
                 case '3' :{
                     choixElement();
-                    afficherElement(plateau, choix2, x, y, &joueur, &construction);
+                    afficherElement(plateau, choix2, &joueur, &construction, sommet);
                     afficherPlateau(plateau);
                     afficherMenu();
                     afficherRessource(&joueur);
+                    break;
+                }
+                case '5' :{
+                    printf("\n\n\n\n ADJACENCE : \n") ;
+                    for (int boucle2 = 0; boucle2 < 5; boucle2++) {
+                        printf("x = %d :: " ,sommet[boucle2][0]);
+                        printf("y = %d :: " ,sommet[boucle2][1]);
+                        printf("numsommet = %d :: " ,sommet[boucle2][2]);
+                        printf("Adj1 = %d :: " ,sommet[boucle2][3]);
+                        printf("Adj2 = %d :: " ,sommet[boucle2][4]);
+                        printf("Adj3 = %d :: " ,sommet[boucle2][5]);
+                        printf("Adj4 = %d \n" ,sommet[boucle2][6]);
+                    }
+                    break;
                 }
             }
         }

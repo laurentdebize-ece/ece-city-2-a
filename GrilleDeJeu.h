@@ -20,7 +20,10 @@ typedef struct Construction {
     int cout;
     int revenu;
     int nombreDHabitant;
+    int devConstru;
 } Construction;
+
+enum construction {ROUTE, MAISON, EAU, ELEC};
 
 #define nbLignes 35
 #define nbColonnes 45

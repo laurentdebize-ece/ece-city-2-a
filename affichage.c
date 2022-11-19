@@ -1,21 +1,32 @@
-#include "GrilleDeJeu.h"
+
+#include "affichage.h"
+
 
 DonneesJoueur initialisationJoueur(DonneesJoueur *joueur) {
+    joueur->compteurTemps = 0;
     joueur->compteurMonnaie = 500000;
+    joueur->nombreDHabitants = 0;
+    joueur->capaciteEau = 0;
+    joueur->capaciteElectrique = 0;
+    joueur->nb_sommet = 0;
+    joueur->mode_jeux = 0; // 0 = mode communiste; 1 = mode capitaliste
     return *joueur;
 }
 
 void initialisationConstruction(Construction *construction) {
-    if (construction->choixBatiment == 1){
+
+    construction->cout = 0;
+
+    if (construction->choixBatiment == ROUTE){
         construction->cout = 10;
     }
-    else if (construction->choixBatiment == 2){
+    else if (construction->choixBatiment == MAISON){
         construction->cout = 1000;
     }
-    else if (construction->choixBatiment == 3){
+    else if (construction->choixBatiment == ELEC){
         construction->cout = 100000;
     }
-    else if (construction->choixBatiment == 4){
+    else if (construction->choixBatiment == EAU){
         construction->cout = 100000;
     }
 }
@@ -42,6 +53,24 @@ void AllouerTableau(char ***plateau) {
 
 }
 
+void AllouerSommet(int ***sommet) {
+    *sommet = malloc(5 * sizeof(int *));//premier test avec 5 sommet
+    for (int i = 0; i < 7; i++)
+        *(*sommet + i) = malloc(5 * sizeof(int));
+
+}
+
+void InitialisationSommet(int **sommet) {
+    int i, j;
+    for (i = 0; i < 5; i++)
+    {
+        for (j = 0; j < 7; j++)
+        {
+            sommet[i][j] = 0;
+        }
+    }
+}
+
 void creerTableau(char **plateau) {
     int i, j;
 
@@ -52,7 +81,7 @@ void creerTableau(char **plateau) {
     }
 }
 
-void saisir_coordonnees(int *x, int *y) {
+void saisir_coordonnees(Construction* construction) {
     locate(100,18);
     printf("Saisissez des coordonnees :\n");
     int ret, continuer;
@@ -61,10 +90,9 @@ void saisir_coordonnees(int *x, int *y) {
         locate(100,19);
         printf("x : \n");
         locate(100,20);
-        fflush(stdout);
-        ret = scanf("%d", x);
+        ret = scanf("%d", &construction->x);
 
-        if(ret != 1 || *x <= 0 || *x > 35)
+        if(ret != 1 || construction->x <= 0 || construction->x > 35)
             continuer = 1;
 
         while(ret != '\n' && ret != EOF)  // vide le buffer
@@ -77,11 +105,10 @@ void saisir_coordonnees(int *x, int *y) {
         locate(100,21);
         printf("y : \n");
         locate(100,22);
-        fflush(stdout);
-        ret = scanf("%d", y);
+        ret = scanf("%d", &construction->y);
         //*y = modifier
 
-        if(ret != 1 || *y <= 0 || *y > 45)
+        if(ret != 1 || construction->y <= 0 || construction->y > 45)
             continuer = 1;
 
         while(ret != '\n' && ret != EOF)  // vide le buffer
@@ -91,61 +118,167 @@ void saisir_coordonnees(int *x, int *y) {
 
 }
 
+void check_adjacent(char **plateau,Construction *construction, DonneesJoueur *joueur, int **sommet) {
+    int debugx=0;
+    int debugy=0;
+    char checkadj;
+    debugx = construction->x;
+    debugy = construction->y;
 
-void placer_bloc(char **plateau, int x, int y, Construction *construction, DonneesJoueur *joueur) {
-    if(construction->choixBatiment == 1){
-        plateau[x-1][y-1] = -36;
-        argentJoueur(joueur, construction);
+    // recherche adjacent horizontaux
+    for (int boucle = 0; boucle < joueur->nb_sommet ; boucle++)
+    {
+        debugx = construction->x;
+        debugy = construction->y;
+        if (construction->x == sommet[boucle][0])
+        {
+            debugy = construction->y-1;
+
+            // recherche adjacent gauche
+            if (construction->y-1 == sommet[boucle][1])
+            {
+                for (int boucleadj = 3; boucleadj <6 ; boucleadj++)
+                {
+                    if (sommet[boucle][boucleadj] == 0)
+                    {
+                        Sleep(3);
+                        sommet[boucle][boucleadj]= joueur->nb_sommet;
+                        break;
+                    }
+                }
+
+            }
+            // recherche adjacent droite
+            if (construction->y+1 == sommet[boucle][1])
+            {
+                for (int boucleadj = 3; boucleadj <6 ; boucleadj++)
+                {
+                    if (sommet[boucle][boucleadj] == 0)
+                    {
+                        Sleep(3);
+                        sommet[boucle][boucleadj]= joueur->nb_sommet;
+                        break;
+                    }
+                }
+
+            }
+        }
     }
-    else if(construction->choixBatiment == 2){
+
+    // recherche adjacent verticaux
+
+    for (int boucle = 0; boucle < joueur->nb_sommet ; boucle++)
+    {
+        debugx = construction->x;
+        debugy = construction->y;
+        if (construction->y == sommet[boucle][1])
+        {
+            // recherche adjacent inferieur
+
+            if (construction->x-1 == sommet[boucle][0])
+            {
+                for (int boucleadj = 3; boucleadj <6 ; boucleadj++)
+                {
+                    if (sommet[boucle][boucleadj] == 0)
+                    {
+                        Sleep(3);
+                        sommet[boucle][boucleadj]= joueur->nb_sommet;
+                        break;
+                    }
+                }
+
+            }
+            // recherche adjacent superieur
+
+            if (construction->x+1 == sommet[boucle][0])
+            {
+                for (int boucleadj = 3; boucleadj <6 ; boucleadj++)
+                {
+                    if (sommet[boucle][boucleadj] == 0)
+                    {
+                        Sleep(3);
+                        sommet[boucle][boucleadj]= joueur->nb_sommet;
+                        break;
+                    }
+                }
+
+            }
+        }
+    }
+    Sleep(3);
+}
+
+void placer_bloc(char **plateau, Construction *construction, DonneesJoueur *joueur, int** sommet) {
+    if(construction->choixBatiment == ROUTE){
+        plateau[construction->x-1][construction->y-1] = -36;
+        argentJoueur(joueur, construction);
+        sommet[joueur->nb_sommet][0] = construction->x;
+        sommet[joueur->nb_sommet][1] = construction->y;
+        sommet[joueur->nb_sommet][2] = joueur->nb_sommet;
+        check_adjacent(plateau, construction, joueur, sommet);
+        joueur->nb_sommet = joueur->nb_sommet + 1;
+    }
+    else if(construction->choixBatiment == MAISON){
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                plateau[x-i-1][y+j-1] = 'M';
+                plateau[construction->x-i-1][construction->y+j-1] = 'M';
             }
         }
         argentJoueur(joueur, construction);
+        sommet[joueur->nb_sommet][1] = construction->x;
+        sommet[joueur->nb_sommet][2] = construction->y-1;
+        sommet[joueur->nb_sommet][3] = joueur->nb_sommet;
+        joueur->nb_sommet = joueur->nb_sommet + 1;
     }
-    else if(construction->choixBatiment == 3){
+    else if(construction->choixBatiment == ELEC){
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 6; j++) {
-                plateau[x-i-1][y+j-1] = 'U';
+                plateau[construction->x-i-1][construction->y+j-1] = 'U';
             }
         }
         argentJoueur(joueur, construction);
+        sommet[joueur->nb_sommet][1] = construction->x;
+        sommet[joueur->nb_sommet][2] = construction->y-1;
+        sommet[joueur->nb_sommet][2] = joueur->nb_sommet;
+        joueur->nb_sommet = joueur->nb_sommet + 1;
     }
-    else if(construction->choixBatiment == 4){
+    else if(construction->choixBatiment == EAU){
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 6; j++) {
-                plateau[x-i-1][y+j-1] = 'C';
+                plateau[construction->x-i-1][construction->y+j-1] = 'C';
             }
         }
         argentJoueur(joueur, construction);
+        sommet[joueur->nb_sommet][1] = construction->x;
+        sommet[joueur->nb_sommet][2] = construction->y-1;
+        sommet[joueur->nb_sommet][2] = joueur->nb_sommet;
+        joueur->nb_sommet = joueur->nb_sommet + 1;
     }
 }
 
-void verif_chevauchement(char** plateau, int x, int y, Construction *construction, DonneesJoueur *joueur) {
+void verif_chevauchement(char** plateau, Construction *construction, DonneesJoueur *joueur, int** sommet) {
 
     int verif = 0;
 
     int tailleX, tailleY = 0;
 
     switch (construction->choixBatiment) {
-        case 1 :{
+        case ROUTE :{
             tailleX = 1;
             tailleY = 1;
             break;
         }
-        case 2 :{
+        case MAISON :{
             tailleX = 3;
             tailleY = 3;
             break;
         }
-        case 3 :{
+        case ELEC :{
             tailleX = 4;
             tailleY = 6;
             break;
         }
-        case 4 :{
+        case EAU :{
             tailleX = 4;
             tailleY = 6;
             break;
@@ -153,34 +286,34 @@ void verif_chevauchement(char** plateau, int x, int y, Construction *constructio
     }
     for (int i = 0; i < tailleX; i++) {
         for (int j = 0; j < tailleY; j++) {
-            if(plateau[x-i-1][y+j-1] != '.'){
+            if(plateau[construction->x-i-1][construction->y+j-1] != '.'){
                 verif = 1;
             }
         }
     }
     if(verif == 1){
-        saisir_coordonnees(&x, &y);
-        verif_chevauchement(plateau, x, y, construction, joueur);
+        saisir_coordonnees(construction);
+        verif_chevauchement(plateau,  construction, joueur, sommet);
     }
     else{
-        placer_bloc(plateau,x,y, construction, joueur);
+        placer_bloc(plateau, construction, joueur, sommet);
     }
 }
 
-void valid_coordonnees(int x, int y, char** plateau, Construction *construction, DonneesJoueur *joueur) {
+void valid_coordonnees(char** plateau, Construction *construction, DonneesJoueur *joueur, int** sommet) {
 
     int verif = 0;
 
     while (verif != 1){
-        if(((construction->choixBatiment == 2) && (x < 3 || y > 43))){
-            saisir_coordonnees(&x,&y);
+        if(((construction->choixBatiment == 2) && (construction->x < 3 || construction->y > 43))){
+            saisir_coordonnees(construction);
         }
-        else if((construction->choixBatiment == 3 || construction->choixBatiment == 4) && (x < 4 || y > 40)){
-            saisir_coordonnees(&x,&y);
+        else if((construction->choixBatiment == 3 || construction->choixBatiment == 4) && (construction->x < 4 || construction->y > 40)){
+            saisir_coordonnees(construction);
         }
         else{
             verif = 1;
-            verif_chevauchement(plateau, x, y, construction, joueur);
+            verif_chevauchement(plateau, construction, joueur, sommet);
         }
     }
 }
@@ -282,6 +415,29 @@ void save_grille(FILE* fichier, char* save, char** plateau) {
 
 }
 
+void lire_DonneesJoueur(char* save, DonneesJoueur *joueur) {
+    FILE* fichier = NULL;
+    fichier = fopen(save, "r");
+
+    if (fichier != NULL)
+    {
+        fscanf(fichier,"%d %d %d %d %d %d %d", &joueur->compteurTemps, &joueur->compteurMonnaie, &joueur->mode_jeux, &joueur->nombreDHabitants, &joueur->capaciteEau, &joueur->capaciteElectrique, &joueur->nb_sommet);
+    }
+    fclose(fichier);
+}
+
+void save_DonneesJoueur(char* save, DonneesJoueur *joueur) {
+    FILE* fichier = NULL;
+    fichier = fopen(save, "w");
+
+    if(fichier != NULL){
+
+        fprintf(fichier, "%d\n%d\n%d\n%d\n%d\n%d\n%d\n", joueur->compteurTemps, joueur->compteurMonnaie, joueur->mode_jeux, joueur->nombreDHabitants, joueur->capaciteEau, joueur->capaciteElectrique, joueur->nb_sommet );
+
+        fclose(fichier);
+    }
+}
+
 void afficherMenu() {
     int i, j;
     //printf("\n");
@@ -318,7 +474,7 @@ void choixElement() {
     locate(100,16);
 }
 
-void route(char** plateau, int choix, int x, int y, DonneesJoueur *joueur, Construction *construction) {
+void route(char** plateau, int choix, DonneesJoueur *joueur, Construction *construction, int** sommet) {
     choix = 1;
     do {
         if(joueur->compteurMonnaie >= construction->cout){
@@ -334,14 +490,13 @@ void route(char** plateau, int choix, int x, int y, DonneesJoueur *joueur, Const
             printf("                                            ");
             locate(100,25);
             printf("                                            ");
-            saisir_coordonnees(&x, &y);
-            valid_coordonnees(x, y, plateau, construction, joueur);
+            saisir_coordonnees(construction);
+            valid_coordonnees(plateau, construction, joueur, sommet);
             locate(100,23);
             printf("Souhaitez-vous placer une autre route ?\n\r");
             locate(100,24);
             printf("(1) Oui      (2) Non\n\r");
             locate(100,25);
-            fflush(stdout);
             scanf("%d", &choix);
             locate(100,23);
             printf("                                            ");
@@ -355,10 +510,10 @@ void route(char** plateau, int choix, int x, int y, DonneesJoueur *joueur, Const
     } while (choix == 1);
 }
 
-void terrainVague(char** plateau, int x, int y, DonneesJoueur *joueur, Construction *construction) {
+void terrainVague(char** plateau, DonneesJoueur *joueur, Construction *construction, int** sommet) {
     if(joueur->compteurMonnaie >= construction->cout){
-        saisir_coordonnees(&x, &y);
-        valid_coordonnees(x, y, plateau, construction, joueur);
+        saisir_coordonnees(construction);
+        valid_coordonnees(plateau, construction, joueur, sommet);
     }
     else{
         locate(100,23);
@@ -366,10 +521,10 @@ void terrainVague(char** plateau, int x, int y, DonneesJoueur *joueur, Construct
     }
 }
 
-void chateauDeau(char** plateau, int x, int y, DonneesJoueur *joueur, Construction *construction) {
+void chateauDeau(char** plateau, DonneesJoueur *joueur, Construction *construction, int** sommet) {
     if(joueur->compteurMonnaie >= construction->cout){
-        saisir_coordonnees(&x, &y);
-        valid_coordonnees(x, y, plateau, construction, joueur);
+        saisir_coordonnees(construction);
+        valid_coordonnees(plateau, construction, joueur, sommet);
     }
     else{
         locate(100,23);
@@ -377,10 +532,10 @@ void chateauDeau(char** plateau, int x, int y, DonneesJoueur *joueur, Constructi
     }
 }
 
-void centraleElectrique(char** plateau, int x, int y, DonneesJoueur *joueur, Construction *construction) {
+void centraleElectrique(char** plateau, DonneesJoueur *joueur, Construction *construction, int** sommet) {
     if(joueur->compteurMonnaie >= construction->cout){
-        saisir_coordonnees(&x, &y);
-        valid_coordonnees(x, y, plateau, construction, joueur);
+        saisir_coordonnees(construction);
+        valid_coordonnees(plateau, construction, joueur, sommet);
     }
     else{
         locate(100,23);
@@ -388,24 +543,23 @@ void centraleElectrique(char** plateau, int x, int y, DonneesJoueur *joueur, Con
     }
 }
 
-void afficherElement(char** plateau, int choix, int x, int y, DonneesJoueur *joueur, Construction *construction) {
-    fflush(stdout);
+void afficherElement(char** plateau, int choix, DonneesJoueur *joueur, Construction *construction, int** sommet) {
     scanf("%d", &construction->choixBatiment);
     switch (construction->choixBatiment) {
         case 1:{
-            route(plateau, choix, x, y, joueur, construction);
+            route(plateau, choix, joueur, construction, sommet);
             break;
         }
         case 2:{
-            terrainVague(plateau, x, y, joueur, construction);
+            terrainVague(plateau, joueur, construction, sommet);
             break;
         }
         case 3:{
-            centraleElectrique(plateau, x, y, joueur, construction);
+            centraleElectrique(plateau,  joueur, construction, sommet);
             break;
         }
         case 4:{
-            chateauDeau(plateau, x, y, joueur, construction);
+            chateauDeau(plateau,  joueur, construction, sommet);
             break;
         }
     }

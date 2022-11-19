@@ -51,6 +51,21 @@ typedef struct file {
     t_maillon *fin; //pointeur sur le dernier maillon
 } t_file;
 
+typedef int typage;
+
+struct cellule {
+    typage element;
+    struct cellule *suivant;
+};
+
+typedef struct cellule* Cellule;
+
+
+
+typedef struct file* File;
+
+//Fonction qui renvoie si une file est vide ou non
+#define fileEstVide(F) ((F)->longueur == 0)
 
 Graphe *CreerGraphe(int ordre, FILE *ifs);
 

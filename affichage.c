@@ -54,15 +54,15 @@ void AllouerTableau(char ***plateau) {
 }
 
 void AllouerSommet(int ***sommet) {
-    *sommet = malloc(5 * sizeof(int *));//premier test avec 5 sommet
-    for (int i = 0; i < 7; i++)
-        *(*sommet + i) = malloc(5 * sizeof(int));
+    *sommet = malloc(10 * sizeof(int *));//premier test avec 5 sommet
+    for (int i = 0; i < 10; i++)
+        *(*sommet + i) = malloc(7 * sizeof(int));
 
 }
 
 void InitialisationSommet(int **sommet) {
     int i, j;
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < 10; i++)
     {
         for (j = 0; j < 7; j++)
         {

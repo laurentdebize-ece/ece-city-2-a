@@ -3,72 +3,70 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include "affichage.h"
 
-#define nbLignes 35
-#define nbColonnes 45
+typedef struct maillon{
+    //numéro du sommet
+    int num;
+//pointeur sur la maillon suivant
+    struct maillon*suiv;
+}t_maillon;
 
-struct Arc {
-    char lettre;
-    int sommet;// numero de sommet d'un arc adjacent au sommet initial
+typedef struct file{
+    t_maillon*tete; //pointeur sur le premier maillon
+    t_maillon*fin; //pointeur sur le dernier maillon
+}t_file;
+
+/* Structure d'un arc*/
+struct Arc
+{
+    int sommet; // numero de sommet d'un arc adjacent au sommet initial
     int valeur;
-    int distance;
-    int couleur;
-    struct Arc *arc_suivant;
+    struct Arc* arc_suivant;
 };
-typedef struct Arc *pArc;
 
-struct Sommet {
-    struct Arc *arc;
-    char *lettre;
+/* Alias de pointeur sur un Arc */
+typedef struct Arc* pArc;
+
+/* Structure d'un sommet*/
+struct Sommet
+{
+    struct Arc* arc;
     int valeur;
-    int distance;
     int connexe;
-    int *debut;
-    int *finxplo;
+    int* debut;
+    int* finxplo;
     char couleur;
-
 };
-typedef struct Sommet *pSommet;
 
-typedef struct Graphe {
+/* Alias de pointeur sur un Sommet */
+typedef struct Sommet* pSommet;
+
+/* Alias d'un Graphe */
+typedef struct Graphe
+{
     int date;
     int taille;
     int orientation;
     int ordre;
-    pSommet *pSommet;
+    pSommet* pSommet;
 } Graphe;
 
-typedef struct maillon {
-    //numéro du sommet
-    int num;
-//pointeur sur la maillon suivant
-    struct maillon *suiv;
-} t_maillon;
+// creer le graphe
+Graphe* CreerGraphe(int ordre);
 
-typedef struct file {
-    t_maillon *tete; //pointeur sur le premier maillon
-    t_maillon *fin; //pointeur sur le dernier maillon
-} t_file;
+Graphe* charge_graphe(DonneesJoueur *joueur, int **sommet);
 
-typedef int typage;
+// Ajouter l'arete entre les sommets s1 et s2 du graphe
+pSommet* CreerArete(pSommet* sommet,int s1,int s2);
 
-struct cellule {
-    typage element;
-    struct cellule *suivant;
-};
+/* affichage des successeurs du sommet num*/
+void afficher_successeurs(pSommet * sommet, int num);
 
-typedef struct cellule* Cellule;
+void enfiler(t_file *f,int num);
+int defiler(t_file *f);
 
-
-
-typedef struct file* File;
-
-//Fonction qui renvoie si une file est vide ou non
-#define fileEstVide(F) ((F)->longueur == 0)
-
-Graphe *CreerGraphe(int ordre, FILE *ifs);
-
-Graphe *lire_graphe(char *nomFichier);
+int BFS(Graphe* graphe,int *preds,int s0);
+void affichage(int* preds,int s0,Graphe * graphe);
 
 #endif //ECE_CITY_2_A_GRAPHE_H

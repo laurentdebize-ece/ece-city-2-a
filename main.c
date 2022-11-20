@@ -1,4 +1,5 @@
 #include "affichage.h"
+#include "graphe.h"
 #include "compteur.h"
 
 
@@ -47,6 +48,9 @@ int main(){
     int choix = 0;
     int choix2 = 0;
     FILE* fichier = NULL;
+
+    Graphe* g;
+    int *preds=(int*)malloc(g->ordre*sizeof(int));
 
     DonneesJoueur joueur;
     Construction construction;
@@ -98,7 +102,7 @@ int main(){
                 }
                 case '5' :{
                     printf("\n\n\n\n ADJACENCE : \n") ;
-                    for (int boucle2 = 0; boucle2 < 5; boucle2++) {
+                    for (int boucle2 = 0; boucle2 < 10; boucle2++) {
                         printf("x = %d :: " ,sommet[boucle2][0]);
                         printf("y = %d :: " ,sommet[boucle2][1]);
                         printf("numsommet = %d :: " ,sommet[boucle2][2]);
@@ -107,6 +111,17 @@ int main(){
                         printf("Adj3 = %d :: " ,sommet[boucle2][5]);
                         printf("Adj4 = %d \n" ,sommet[boucle2][6]);
                     }
+                    g=charge_graphe(&joueur, sommet);
+                    int s0;
+                    printf("choisissez le sommet initial\n");
+                    do {
+                        scanf("%d", &s0);
+                    } while (s0 < 0 || s0 > g->ordre);
+
+
+                    printf("\nBFS\n\n");
+                    BFS(g,preds,s0);
+                    affichage(preds,s0,g);
                     break;
                 }
             }

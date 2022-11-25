@@ -1,29 +1,21 @@
-#include <stdio.h>
-#include <time.h>
 #include "compteur.h"
-void passer15s(){
-    time_t previousTime = time(NULL);
-    time_t currentTime = time(NULL);
-    while (difftime(currentTime, previousTime) < 2){
-        currentTime = time(NULL);
-    }
+
+long timediff(clock_t t1, clock_t t2) {
+    long elapsed;
+    elapsed = ((double) t2 - t1) / CLOCKS_PER_SEC;
+    return elapsed;
 }
 
-
-int compteur15s() {
-    time_t temps1, temps2;
-    struct tm currentTime, previousTime;
-    char format1[100], format2[100];
-
-    time(&temps1);
-    previousTime = *localtime(&temps1);
-    strftime(format1, 100, "%X\n", &previousTime);
-    puts(format1);
-    fflush(stdout);
-    passer15s();
-    time(&temps2);
-    currentTime = *localtime(&temps2);
-    strftime(format2, 100, "%X\n", &currentTime);
-    puts(format2);
-    fflush(stdout);
+paramclock check_time_15(paramclock *majclock, DonneesJoueur *joueur) {
+    clock_t t1, t2;
+    t1 = majclock->t1;
+    int maj = 0;
+    long check15;
+    t2 = clock();
+    check15 = timediff(t1, t2);
+    if (check15 >= 10) {
+        majclock->majdon = 1;
+        majclock->t1 = t2;
+    }
+    joueur->compteurTemps = t2 / 1000;
 }

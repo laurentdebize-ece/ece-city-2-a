@@ -1,72 +1,35 @@
-#ifndef ECE_CITY_2_A_GRAPHE_H
-#define ECE_CITY_2_A_GRAPHE_H
+#ifndef LAST_VERSION_ECE_CITY_GRAPHE_H
+#define LAST_VERSION_ECE_CITY_GRAPHE_H
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "structures.h"
 #include "affichage.h"
 
-typedef struct maillon{
-    //numéro du sommet
-    int num;
-//pointeur sur la maillon suivant
-    struct maillon*suiv;
-}t_maillon;
+pSommet *CreerArete(pSommet *sommet, int s1, int s2);
 
-typedef struct file{
-    t_maillon*tete; //pointeur sur le premier maillon
-    t_maillon*fin; //pointeur sur le dernier maillon
-}t_file;
+Graphe *CreerGraphe(int ordre);
 
-/* Structure d'un arc*/
-struct Arc
-{
-    int sommet; // numero de sommet d'un arc adjacent au sommet initial
-    int valeur;
-    struct Arc* arc_suivant;
-};
+Graphe *charge_graphe(DonneesJoueur *joueur, int **sommet);
 
-/* Alias de pointeur sur un Arc */
-typedef struct Arc* pArc;
+Graphe *recharge_graphe(DonneesJoueur *joueur, int **sommet);
 
-/* Structure d'un sommet*/
-struct Sommet
-{
-    struct Arc* arc;
-    int valeur;
-    int connexe;
-    int* debut;
-    int* finxplo;
-    char couleur;
-};
+void enfiler(t_file *f, int num);
 
-/* Alias de pointeur sur un Sommet */
-typedef struct Sommet* pSommet;
-
-/* Alias d'un Graphe */
-typedef struct Graphe
-{
-    int date;
-    int taille;
-    int orientation;
-    int ordre;
-    pSommet* pSommet;
-} Graphe;
-
-// creer le graphe
-Graphe* CreerGraphe(int ordre);
-
-Graphe* charge_graphe(DonneesJoueur *joueur, int **sommet);
-
-// Ajouter l'arete entre les sommets s1 et s2 du graphe
-pSommet* CreerArete(pSommet* sommet,int s1,int s2);
-
-/* affichage des successeurs du sommet num*/
-void afficher_successeurs(pSommet * sommet, int num);
-
-void enfiler(t_file *f,int num);
 int defiler(t_file *f);
 
-int BFS(Graphe* graphe,int *preds,int s0);
-void affichage(int* preds,int s0,Graphe * graphe);
+int BFS(Graphe *graphe, int *preds, int s0);
 
-#endif //ECE_CITY_2_A_GRAPHE_H
+void checkconnexioneau(int *preds, DonneesJoueur *joueur, int s0, int s1, int **sommet, Graphe *g);
+
+void checkconnexionmaisonelec(int *preds, DonneesJoueur *joueur, int s0, int **sommet, Maison listeMaison[], int numelec, Centraleelec listeCentraleelec[]);
+
+void checkconnexionmaison(int *preds, DonneesJoueur *joueur, int s0, int **sommet, Maison listeMaison[], int numchateau, Chateaueau listeChateau[]);
+
+void check_maison(int s0, DonneesJoueur *joueur, int **sommet, Maison listeMaison[], int nb_arrete, int numchateau, Chateaueau listeChateau[]);
+
+void check_maison_elec(int s0, DonneesJoueur *joueur, int **sommet, Maison listeMaison[], int nb_arrete, int numelec, Centraleelec listeCentraleelec[]);
+
+void checkelecmaison(int *preds, char **plateau, DonneesJoueur *joueur, int **sommet, Maison listeMaison[], Centraleelec listeCentraleelec[]);
+
+void checkchateaumaison(int *preds, char **plateau, DonneesJoueur *joueur, int **sommet, Maison listeMaison[], Chateaueau listeChateau[]);
+
+#endif //LAST_VERSION_ECE_CITY_GRAPHE_H

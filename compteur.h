@@ -1,12 +1,10 @@
-//
-// Created by tcatt on 19/11/2022.
-//
+#ifndef LAST_VERSION_ECE_CITY_COMPTEUR_H
+#define LAST_VERSION_ECE_CITY_COMPTEUR_H
 
-#ifndef VERSION_ABOUTIE_ECE_CITY_COMPTEUR_H
-#define VERSION_ABOUTIE_ECE_CITY_COMPTEUR_H
+#include "structures.h"
 
+long timediff(clock_t t1, clock_t t2);
 
-void passer15s();
-int compteur15s();
+paramclock check_time_15(paramclock *majclock, DonneesJoueur *joueur);
 
-#endif //VERSION_ABOUTIE_ECE_CITY_COMPTEUR_H
+#endif //LAST_VERSION_ECE_CITY_COMPTEUR_H

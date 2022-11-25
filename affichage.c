@@ -547,6 +547,7 @@ void route(int *preds, char **plateau, int choix, DonneesJoueur *joueur, Constru
             locate(100, 23);
             color(4,0);
             printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
+            sleep(3);
         }
     } while (choix == 1);
     color(15,0);
@@ -558,8 +559,11 @@ void terrainVague(int *preds, char **plateau, DonneesJoueur *joueur, Constructio
         valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
     } else {
         locate(100, 23);
+        color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
+        sleep(3);
     }
+    color(15,0);
 }
 
 void chateauDeau(int *preds, char **plateau, DonneesJoueur *joueur, Construction *construction, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
@@ -568,8 +572,11 @@ void chateauDeau(int *preds, char **plateau, DonneesJoueur *joueur, Construction
         valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
     } else {
         locate(100, 23);
+        color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
+        sleep(3);
     }
+    color(15,0);
 }
 
 void centraleElectrique(int *preds, char **plateau, DonneesJoueur *joueur, Construction *construction, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
@@ -578,8 +585,11 @@ void centraleElectrique(int *preds, char **plateau, DonneesJoueur *joueur, Const
         valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
     } else {
         locate(100, 23);
+        color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
+        sleep(3);
     }
+    color(15,0);
 }
 
 void afficherElement(int *preds, char **plateau, int choix, DonneesJoueur *joueur, Construction *construction, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {

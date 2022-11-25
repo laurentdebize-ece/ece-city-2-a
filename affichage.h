@@ -3,6 +3,7 @@
 
 #include "structures.h"
 #include "graphe.h"
+#include <unistd.h>
 
 void color(int couleurDuTexte, int couleurDeFond);
 

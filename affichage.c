@@ -154,6 +154,7 @@ void creerTableau(char **plateau) {
 
 void saisir_coordonnees(Construction *construction) {
     locate(100, 18);
+    color(8,0);
     printf("Saisissez des coordonnees :\n");
     int ret, continuer;
     do {
@@ -185,6 +186,7 @@ void saisir_coordonnees(Construction *construction) {
             ret = getchar();
 
     } while (continuer);
+    color(15,0);
 }
 
 void check_adjacent(char **plateau, Construction *construction, DonneesJoueur *joueur, int **sommet) {
@@ -478,7 +480,9 @@ void save_DonneesJoueur(char *save, DonneesJoueur *joueur) {
 void afficherMenu() {
     int i, j;
     locate(100, 2);
+    color(0,13);
     printf("Boite a outils : \n");
+    color(13,0);
     locate(100, 3);
     printf("- (-1) : Affichage niveau -1   ");
     locate(100, 4);
@@ -492,6 +496,7 @@ void afficherMenu() {
     locate(100, 8);
     printf("- 4 : Sortir du jeux \n");
     locate(100, 9);
+    color(15,0);
 }
 
 void choixElement() {
@@ -528,6 +533,7 @@ void route(int *preds, char **plateau, int choix, DonneesJoueur *joueur, Constru
             valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau,
                               listeCentraleelec);
             locate(100, 23);
+            color(12,0);
             printf("Souhaitez-vous placer une autre route ?\n\r");
             locate(100, 24);
             printf("(1) Oui      (2) Non\n\r");
@@ -539,9 +545,11 @@ void route(int *preds, char **plateau, int choix, DonneesJoueur *joueur, Constru
             printf("                                            ");
         } else {
             locate(100, 23);
+            color(4,0);
             printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
         }
     } while (choix == 1);
+    color(15,0);
 }
 
 void terrainVague(int *preds, char **plateau, DonneesJoueur *joueur, Construction *construction, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
@@ -600,6 +608,7 @@ void afficherElement(int *preds, char **plateau, int choix, DonneesJoueur *joueu
 
 void afficherRessource(DonneesJoueur *joueur, Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
     locate(92, 30);
+    color(11, 0);
     printf(" Compteur temporel :  %ld s   ", joueur->compteurTemps);
     locate(92, 31);
     printf(" Monnaie :  %d   ", joueur->compteurMonnaie);
@@ -613,6 +622,7 @@ void afficherRessource(DonneesJoueur *joueur, Chateaueau listeChateau[], Central
     for (int i = 0; i < joueur->nb_chateaueau; i++) {
         printf(" n%d %d/5000 :", i + 1, listeChateau[i].capa);
     }
+    color(15,0);
 }
 
 int checksommet(DonneesJoueur *joueur, int x, int y, int **sommet) {

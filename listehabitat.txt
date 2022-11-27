@@ -1,0 +1,5 @@
+Type : T nbhab : 0
+Type : C nbhab : 10
+Type : M nbhab : 50
+Type : I nbhab : 100
+Type : G nbhab : 1000

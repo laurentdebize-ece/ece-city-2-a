@@ -1,0 +1,18 @@
+REGLES DU JEU :
+
+Dans ce jeu, vous etes le maire de la ville ECE-city, en charge du bien-etre de ses citoyens.
+Vous avez le pouvoir de construire des infrastructures (routes, lignes electriques,
+canalisation d'eau potable) et des batiments (chateaux d'eau, centrales electriques,
+maisons,...).
+
+Toutes ces taches seront a realiser en gerant un budget serre qui doit equilibrer les
+depenses liees a ces constructions et les recettes liees aux impots et taxes.
+
+L'objectif pour le joueur est de favoriser le développement automatique de sa population.
+- Pour que la population se developpe, il faut donner aux gens une habitation.
+- Pour qu'une habitation se construise, il faut la connecter au reseau routier et l'alimenter
+en eau et en electricite.
+- Pour distribuer de l'eau et de l'electricite aux maisons, il faut construire des usines
+electriques et des chateaux d'eau.
+
+BONNE CHANCE ET BON JEU A VOUS !!!

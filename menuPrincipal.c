@@ -1,12 +1,14 @@
 #include "menuPrincipal.h"
 
-void menuPrincipal(){
+void menuPrincipal() {
     FILE *fichier = NULL;
     int choixMenu = 0;
 
     locate(70, 5);
+    color(15, 12);
     printf("ECE CITY");
     //getch();
+    color(12, 0);
     locate(64, 10);
     printf("QUE VOULEZ VOUS FAIRE ?");
     locate(52, 15);
@@ -17,18 +19,19 @@ void menuPrincipal(){
     printf("3.REGLES DU JEU");
     //printf("\n");
     locate(92, 22);
+    color(15, 0);
     fflush(stdout);
     scanf("%d", &choixMenu);
     //getch();
 
     switch (choixMenu) {
-        case 1 :{
+        case 1 : {
             locate(90, 32);
             printf("JEU EN MODE COMMUNISTE\n");
             nouvellePartie();
             break;
         }
-        case 2 :{
+        case 2 : {
             locate(90, 32);
             printf("JEU EN MODE CAPITALISTE\n");
             nouvellePartie();

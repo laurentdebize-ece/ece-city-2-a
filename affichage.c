@@ -173,7 +173,7 @@ void creerTableau(char **plateau) {
 //Fonction qui permet la saisie des coordonnées de nos constructions et routes
 void saisir_coordonnees(Construction *construction) {
     locate(100, 18); // Localisation du texte sur l'écran
-    color(8, 0);
+    //color(8, 0);
     printf("Saisissez des coordonnees :\n");
     int ret, continuer;
     do {
@@ -205,7 +205,7 @@ void saisir_coordonnees(Construction *construction) {
             ret = getchar();
 
     } while (continuer);
-    color(15, 0);
+    //color(15, 0);
 }
 
 
@@ -395,14 +395,14 @@ void afficherPlateau(char **plateau) {
         }
 
         for (j = 0; j < nbColonnes; j++) {
-            if (plateau[i][j] == 'U') {
+            /*if (plateau[i][j] == 'U') {
                 color(6, 0);
             }
             if (plateau[i][j] == 'E') {
                 color(9, 0);
-            }
+            }*/
             printf("%c ", plateau[i][j]);
-            color(15, 0);
+            //color(15, 0);
         }
         printf("\n");
     }
@@ -615,10 +615,10 @@ void lire_listeMaison(char *save, DonneesJoueur *joueur, Maison listeMaison[]) {
 void afficherMenu() {
     int i, j;
     locate(100, 1);
-    color(0, 7);
+    //color(0, 7);
     printf("Boite a outils : \n");
     locate(100, 2);
-    color(7, 0);
+    //color(7, 0);
     printf("- 0 : lire la notice \n");
     locate(100, 3);
     printf("- 1 : restaurer une sauvegarde \n");
@@ -633,14 +633,14 @@ void afficherMenu() {
     locate(100, 8);
     printf("- 6 : Sortir du jeux \n");
     locate(100, 9);
-    color(15, 0);
+    //color(15, 0);
 }
 
 
 //Affichage des différents éléments que le joueur peut placer
 void choixElement() {
     locate(100, 11);
-    color(7, 0);
+    //color(7, 0);
     printf("Quelle element voulez-vous placer ? \n");
     locate(100, 12);
     printf("- 1 : route \n");
@@ -651,7 +651,7 @@ void choixElement() {
     locate(100, 15);
     printf("- 4 : chateau d'eau \n");
     locate(100, 16);
-    color(15, 0);
+    //color(15, 0);
 }
 
 
@@ -675,7 +675,7 @@ void route(int *preds, char **plateau, int choix, DonneesJoueur *joueur, Constru
             saisir_coordonnees(construction);
             valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
             locate(100, 23);
-            color(12, 0);
+            //color(12, 0);
             printf("Souhaitez-vous placer une autre route ?\n\r");
             locate(100, 24);
             printf("(1) Oui      (2) Non\n\r");
@@ -687,13 +687,13 @@ void route(int *preds, char **plateau, int choix, DonneesJoueur *joueur, Constru
             printf("                                            ");
         } else {
             locate(100, 23);
-            color(4, 0);
+            //color(4, 0);
             printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
             Sleep(2000);
             choix = 2;// on sort du while si plus assez de ECEflouz
         }
     } while (choix == 1); // Tant que le joueur veut placer des routes
-    color(15, 0);
+    //color(15, 0);
 }
 
 
@@ -765,7 +765,7 @@ void afficherElement(int *preds, char **plateau, int choix, DonneesJoueur *joueu
 //Fonction qui affiche en continue les données du joueur qui se situent en bas à droite de l'écran
 void afficherRessource(DonneesJoueur *joueur, Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
     locate(92, 30);
-    color(7, 0);
+    //color(7, 0);
     printf(" Compteur temporel :  %ld s   ", joueur->compteurTemps);
     locate(92, 31);
     printf(" Monnaie :  %d   ", joueur->compteurMonnaie);
@@ -779,7 +779,7 @@ void afficherRessource(DonneesJoueur *joueur, Chateaueau listeChateau[], Central
     for (int i = 0; i < joueur->nb_chateaueau; i++) {
         printf(" n%d %d/5000 :", i + 1, listeChateau[i].capa);
     }
-    color(15, 0);
+    //color(15, 0);
 }
 
 

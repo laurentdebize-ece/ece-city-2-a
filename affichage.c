@@ -791,15 +791,15 @@ void afficherElement(int* preds, char** plateau, int choix, DonneesJoueur *joueu
 
 //Fonction qui affiche en continue les données du joueur qui se situent en bas à droite de l'écran
 void afficherRessource(DonneesJoueur *joueur, Chateaueau listeChateau[], Centraleelec listeCentraleelec[]){
-    locate(92,30);
+    locate(100,30);
     printf(" Compteur temporel :  %ld s   ",joueur->compteurTemps);
-    locate(92,31);
+    locate(100,31);
     printf(" Monnaie :  %d   ",joueur->compteurMonnaie);
-    locate(92,32);
-    printf(" Nb Habitants : %d ",joueur->nombreDHabitants);
-    locate(92,33);
+    locate(100,32);
+    printf(" Nombre d'habitants : %d ",joueur->nombreDHabitants);
+    locate(100,33);
     printf(" Capacite electrique : %d ",joueur->capaciteElectrique);
-    locate(92,34);
+    locate(100,34);
     printf(" Capacite eau :");
     locate(107,34);
     for (int i = 0; i < joueur->nb_chateaueau; i++){

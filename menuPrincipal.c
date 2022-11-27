@@ -24,13 +24,14 @@ void menuPrincipal(){
 
     switch (choixMenu) {
         case 1 :{
-            locate(90, 32);
+            locate(91, 25);
             printf("JEU EN MODE COMMUNISTE\n");
+            getch();
             nouvellePartie();
             break;
         }
         case 2 :{
-            locate(90, 32);
+            locate(91, 25);
             printf("JEU EN MODE CAPITALISTE\n");
             nouvellePartie();
             break;
@@ -40,7 +41,6 @@ void menuPrincipal(){
             menuPrincipal();
             break;
         }
-
         default: {
             printf("\t\t\t\t\t\tCe que vous avez entre ne correspond pas aux options proposees. Veuillez entrer un numero correspondant a une option.\n");
             printf("\n");

@@ -10,8 +10,9 @@ int main() {
     keybd_event(VK_MENU, 0x38, KEYEVENTF_KEYUP, 0); //Relache ALT
     //Fin Affichage console en mode pleine ecran
 
-    color(15,0);
+    color(15,0); //Couleur de fond et de police du texte
 
+    //Déclaration de variables
     int **sommet = NULL;
     int **maison = NULL;
     //int** chateaueau = NULL;
@@ -36,30 +37,38 @@ int main() {
     Construction construction;
     paramclock majclock;
 
+    //Initialisation des données joueur et constructions
     initialisationJoueur(&joueur);
     initialisationConstruction(&construction);
 
+    //Allocation de la grille
     AllouerTableau(&plateau);
 
+    //Allocation et initialisation des sommets pour la théorie des graphes
     AllouerSommet(&sommet);
     InitialisationSommet(sommet);
 
+    //Initialisation de chaque type de construction
     Initialisationmaison(listeMaison);
     initialisationChateaueau(listeChateau);
     initialisationCentraleelec(listeCentraleelec);
 
+    //Initialisation compteur temps du jeu
     initialisationmajclock(&majclock);
 
+    //Création de la grille et son affichage
     creerTableau(plateau);
     afficherPlateau(plateau);
     afficherPlateau(plateau);
-    afficherPlateau(plateau); // bug clion suite à maj windows donc appelle 2 fois de suite la meme fonction
+    afficherPlateau(plateau); // bug clion suite à maj windows donc appelle 3 fois de suite la meme fonction
 
-    ChargeHabitat(fichier, listeHabitat);// charge la correspondance type batiment / nbhabitant epuis un fichier
+    ChargeHabitat(fichier, listeHabitat);// charge la correspondance type batiment / nbhabitant depuis un fichier
 
+    //Affichage des actions du joueur et des données
     afficherMenu();
     afficherRessource(&joueur, listeChateau, listeCentraleelec);
 
+    //Création et chargement du graphe
     Graphe *g = charge_graphe(&joueur, sommet);
     int s0;
     int *preds2 = (int *) malloc(g->ordre * sizeof(int));

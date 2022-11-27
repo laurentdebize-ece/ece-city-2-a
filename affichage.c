@@ -1,10 +1,12 @@
 #include "affichage.h"
 
+//Fonction pour la couleur des polices (réutilisation du code venant du projet monopoly)
 void color(int couleurDuTexte, int couleurDeFond) {
     HANDLE H = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(H, couleurDeFond * 16 + couleurDuTexte);
 }
 
+//Initialisation des données du joueur
 DonneesJoueur initialisationJoueur(DonneesJoueur *joueur) {
     joueur->compteurTemps = 0;
     joueur->compteurMonnaie = 500000;
@@ -19,11 +21,13 @@ DonneesJoueur initialisationJoueur(DonneesJoueur *joueur) {
     return *joueur;
 }
 
+//Initialisation du compteur temps
 paramclock initialisationmajclock(paramclock *majclock) {
     majclock->majdon = 0;
     return *majclock;
 }
 
+//Initialisation des constructions
 void initialisationConstruction(Construction *construction) {
 
     construction->cout = 0;
@@ -108,11 +112,14 @@ void ChargeHabitat(FILE *fichier, Habitat listeHabitat[]) {
     }
 }
 
+//Fonction qui met à jour l'argent du joueur
 int argentJoueur(DonneesJoueur *joueur, Construction *construction) {
     initialisationConstruction(construction);
     return joueur->compteurMonnaie = joueur->compteurMonnaie - construction->cout;
 }
 
+//Fonction qui permet de localiser sur l'écran en console le texte
+//C'est-à-dire que l'on peut afficher notre grille de jeu à gauche et la boîte à outils et les données du joueur à droite
 void locate(int x, int y) {
     HANDLE H = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD C;
@@ -121,18 +128,21 @@ void locate(int x, int y) {
     SetConsoleCursorPosition(H, C);
 }
 
+//Allocation de la grille dynamiquement
 void AllouerTableau(char ***plateau) {
     *plateau = malloc(nbLignes * sizeof(char *));
     for (int i = 0; i < nbLignes; i++)
         *(*plateau + i) = malloc(nbColonnes * sizeof(char));
 }
 
+//Allocation des sommets pour la théorie des graphes
 void AllouerSommet(int ***sommet) {
     *sommet = malloc(1225 * sizeof(int *));//premier test avec 5 sommet
     for (int i = 0; i < 1225; i++)
         *(*sommet + i) = malloc(7 * sizeof(int));
 }
 
+//Initialisation des sommets
 void InitialisationSommet(int **sommet) {
     int i, j;
     for (i = 0; i < 1225; i++) {
@@ -142,6 +152,7 @@ void InitialisationSommet(int **sommet) {
     }
 }
 
+//Création des cases de la grille qui sont des points
 void creerTableau(char **plateau) {
     int i, j;
 
@@ -152,9 +163,10 @@ void creerTableau(char **plateau) {
     }
 }
 
+//Fonction qui permet la saisie des coordonnées de nos constructions et routes
 void saisir_coordonnees(Construction *construction) {
-    locate(100, 18);
-    color(8,0);
+    locate(100, 18); // Localisation du texte sur l'écran
+    color(8,0); // Sa couleur
     printf("Saisissez des coordonnees :\n");
     int ret, continuer;
     do {
@@ -189,6 +201,7 @@ void saisir_coordonnees(Construction *construction) {
     color(15,0);
 }
 
+//Fonction de recherche de sommets adajacens pour la viabilité
 void check_adjacent(char **plateau, Construction *construction, DonneesJoueur *joueur, int **sommet) {
 
     // recherche adjacent horizontaux
@@ -252,22 +265,23 @@ void check_adjacent(char **plateau, Construction *construction, DonneesJoueur *j
     }
 }
 
+//Fonction qui place la construction ou la route sur la grille
 void placer_bloc(int *preds, char **plateau, Construction *construction, DonneesJoueur *joueur, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
-    if (construction->choixBatiment == ROUTE) {
-        plateau[construction->x - 1][construction->y - 1] = -36;
-        argentJoueur(joueur, construction);
+    if (construction->choixBatiment == ROUTE) { // Si c'est une route
+        plateau[construction->x - 1][construction->y - 1] = -36; // Attribution du caractère de la route à la case correspondante dans le tableau de la grille
+        argentJoueur(joueur, construction); // Mise à jour de l'argent du joueur
         sommet[joueur->nb_sommet][0] = construction->x;
         sommet[joueur->nb_sommet][1] = construction->y;
         sommet[joueur->nb_sommet][2] = joueur->nb_sommet;
-        check_adjacent(plateau, construction, joueur, sommet);
-        joueur->nb_sommet = joueur->nb_sommet + 1;
-    } else if (construction->choixBatiment == MAISON) {
+        check_adjacent(plateau, construction, joueur, sommet); // Vérification de l'adjacence
+        joueur->nb_sommet = joueur->nb_sommet + 1; // Nombre de routes qui augmente
+    } else if (construction->choixBatiment == MAISON) { // Si c'est un terrain vague
         for (int i = 0; i < construction->nb_x; i++) {
             for (int j = 0; j < construction->nb_y; j++) {
-                plateau[construction->x - i - 1][construction->y + j - 1] = 'T';
+                plateau[construction->x - i - 1][construction->y + j - 1] = 'T'; // Attribution du T représentant le terrain vague au neux cases nécessaires du tableau de la grille
             }
         }
-        argentJoueur(joueur, construction);
+        argentJoueur(joueur, construction); // Mise à jour de l'argent du joueur
         listeMaison[joueur->nb_maison].nummaison = joueur->nb_maison;
         listeMaison[joueur->nb_maison].type = 'T'; //Terrain Vague
         listeMaison[joueur->nb_maison].x = construction->x;
@@ -282,37 +296,38 @@ void placer_bloc(int *preds, char **plateau, Construction *construction, Donnees
         listeMaison[joueur->nb_maison].nbhabmax = 0;
         listeMaison[joueur->nb_maison].nbhab = 0;
 
-        joueur->nb_maison = joueur->nb_maison + 1;
-    } else if (construction->choixBatiment == ELEC) {
+        joueur->nb_maison = joueur->nb_maison + 1; // Nombre d'habitations qui augmente
+    } else if (construction->choixBatiment == ELEC) { // Si c'est une centrale électrique
         for (int i = 0; i < construction->nb_x; i++) {
             for (int j = 0; j < construction->nb_y; j++) {
-                plateau[construction->x - i - 1][construction->y + j - 1] = 'U';
+                plateau[construction->x - i - 1][construction->y + j - 1] = 'U'; // Attribution du U représentant la centrale électrique au 24 cases nécessaires du tableau de la grille
             }
         }
-        argentJoueur(joueur, construction);
+        argentJoueur(joueur, construction); // Mise à jour de l'argent du joueur
         listeCentraleelec[joueur->nb_centraleelec].numcentrale = joueur->nb_centraleelec;
         listeCentraleelec[joueur->nb_centraleelec].x = construction->x;
         listeCentraleelec[joueur->nb_centraleelec].y = construction->y;
         listeCentraleelec[joueur->nb_centraleelec].capa = 5000;
-        joueur->nb_centraleelec = joueur->nb_centraleelec + 1;
-        joueur->capaciteElectrique = joueur->capaciteElectrique + 5000;
-    } else if (construction->choixBatiment == EAU) {
+        joueur->nb_centraleelec = joueur->nb_centraleelec + 1; // Nombre de centrales du projet qui augmente
+        joueur->capaciteElectrique = joueur->capaciteElectrique + 5000; // Electricite totale de la ville qui augmente
+    } else if (construction->choixBatiment == EAU) { // Si c'est un château d'eau
         for (int i = 0; i < construction->nb_x; i++) {
             for (int j = 0; j < construction->nb_y; j++) {
-                plateau[construction->x - i - 1][construction->y + j - 1] = 'E';
+                plateau[construction->x - i - 1][construction->y + j - 1] = 'E'; // Attribution du E représentant le château d'eau au 24 cases nécessaires du tableau de la grille
             }
         }
-        argentJoueur(joueur, construction);
+        argentJoueur(joueur, construction); // Mise à jour de l'argent du joueur
         listeChateau[joueur->nb_chateaueau].numchateau = joueur->nb_chateaueau;
         listeChateau[joueur->nb_chateaueau].x = construction->x;
         listeChateau[joueur->nb_chateaueau].y = construction->y;
-        listeChateau[joueur->nb_chateaueau].capa = 5000;
-        joueur->nb_chateaueau = joueur->nb_chateaueau + 1;
+        listeChateau[joueur->nb_chateaueau].capa = 5000; // Eau totale de la ville qui augmente
+        joueur->nb_chateaueau = joueur->nb_chateaueau + 1; // Nombre de château de la ville qui augmente
     }
-    checkelecmaison(preds, plateau, joueur, sommet, listeMaison, listeCentraleelec);
-    checkchateaumaison(preds, plateau, joueur, sommet, listeMaison, listeChateau);
+    checkelecmaison(preds, plateau, joueur, sommet, listeMaison, listeCentraleelec); // Vérification de la connextion de l'habitation avec une centrale électrique
+    checkchateaumaison(preds, plateau, joueur, sommet, listeMaison, listeChateau); // Vérification de la connexion de l'habitation avec un château d'eau
 }
 
+//Fonction qui vérifie s'il n'y a pas déja une construction ou une route placée à l'endroit où l'on souhaite rajouter notre construction ou route
 void verif_chevauchement(int *preds, char **plateau, Construction *construction, DonneesJoueur *joueur, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
 
     int verif = 0;
@@ -321,83 +336,85 @@ void verif_chevauchement(int *preds, char **plateau, Construction *construction,
 
     for (int i = 0; i < construction->nb_x; i++) {
         for (int j = 0; j < construction->nb_y; j++) {
-            if (plateau[construction->x - i - 1][construction->y + j - 1] != '.') {
+            if (plateau[construction->x - i - 1][construction->y + j - 1] != '.') { // Si les cases nécessaires à notre construction ne sont pas occupées par des points
                 verif = 1;
             }
         }
     }
-    if (verif == 1) {
+    if (verif == 1) { // Alors on ressaisit de nouvelles coordonnées et on vérifie une nouvelle fois le chevauchement
         saisir_coordonnees(construction);
         verif_chevauchement(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
-    } else {
+    } else { // Sinon on place la construction
         placer_bloc(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
     }
 }
 
+//Fonction qui vérifie que la construction sera bien placée dans la grille et que des cases ne se retrouvent pas à l'extérieur
 void valid_coordonnees(int *preds, char **plateau, Construction *construction, DonneesJoueur *joueur, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
     initialisationConstruction(construction);
     int verif = 0;
 
     while (verif != 1) {
-        if (((construction->choixBatiment == 2 || construction->choixBatiment == 3 ||
-              construction->choixBatiment == 4) &&
-             (construction->x < construction->nb_x || construction->y > 46 - construction->nb_y))) {
+        if (((construction->choixBatiment == 2 || construction->choixBatiment == 3 || construction->choixBatiment == 4) && (construction->x < construction->nb_x || construction->y > 46 - construction->nb_y))) {
+            // Si la construction dépasse, on ressaisit de nouvelles coordonnées
             saisir_coordonnees(construction);
-        } else {
+        } else { // Sinon on peut vérifier le chevauchement
             verif = 1;
-            verif_chevauchement(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau,
-                                listeCentraleelec);
+            verif_chevauchement(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
         }
     }
 }
 
+//Affichage de la grille de jeu
 void afficherPlateau(char **plateau) {
     int i, j;
     printf("\n");
     system("cls");
-    locate(1, 1);
-    printf("          5         10        15        20        25        30        35        40        45\n");
+    locate(1, 1); // La grille se situe en haut à gauche de l'écran
+    printf("          5         10        15        20        25        30        35        40        45\n"); // Numéro de la colonne
     for (i = 0; i < nbLignes; i++) {
         if (i + 1 < 10) {
-            printf("%d  ", i + 1);
+            printf("%d  ", i + 1); // Numéro de la ligne
         } else {
-            printf("%d ", i + 1);
+            printf("%d ", i + 1); // Numéro de la ligne
         }
         for (j = 0; j < nbColonnes; j++) {
-            if(plateau[i][j] == 'U') {
-                color(6,0);
+            if(plateau[i][j] == 'U') { // Si la case contient une centrale électrique
+                color(6,0); // Alors la couleur de police est jaune
             }
-            if(plateau[i][j] == 'E') {
-                color(9,0);
+            if(plateau[i][j] == 'E') { // Si la case contient un château d'eau
+                color(9,0); // Alors la couleur de police est bleue
             }
-            if(plateau[i][j] == 'T') {
-                color(7,0);
+            if(plateau[i][j] == 'T') { // Si la case contient un terrain vague
+                color(7,0); // Alors la couleur de police est blanc crème
             }
-            if(plateau[i][j] == 'C') {
-                color(8,0);
+            if(plateau[i][j] == 'C') { // Si la case contient une cabane
+                color(8,0); // Alors la couleur de police est gris
             }
-            if(plateau[i][j] == 'M') {
-                color(10,0);
+            if(plateau[i][j] == 'M') { // Si la case contient une maison
+                color(10,0); // Alors la couleur de police est vert claire
             }
-            if(plateau[i][j] == 'I') {
-                color(11,0);
+            if(plateau[i][j] == 'I') { // Si la case contient un immeuble
+                color(11,0); // Alors la couleur de police est turquoise
             }
-            if(plateau[i][j] == 'G') {
-                color(4,0);
+            if(plateau[i][j] == 'G') { // Si la case contient un gratte-ciel
+                color(4,0); // Alors la couleur de police est rouge
             }
-            printf("%c ", plateau[i][j]);
-            color(15,0);
+            printf("%c ", plateau[i][j]); // On affiche le caractère associée à la case
+            color(15,0); // On remet la couleur de police en blanc
         }
         printf("\n");
     }
 }
 
+//Libération du tableau de la grille
 void free_plateau(char **plateau) {
     for (int i = 0; i < nbLignes; i++)
         free(plateau[i]);
     free(plateau);
 }
 
+//Lecture du fichier de la grille
 void lire_fichier_grille(FILE *fichier, char *save, char **plateau) {
 
     int i = 0, j = 0;
@@ -426,6 +443,7 @@ void lire_fichier_grille(FILE *fichier, char *save, char **plateau) {
     }
 }
 
+//Sauvegarde de la grille
 void save_grille(FILE *fichier, char *save, char **plateau) {
 
     int i = 0, j = 0, fin = 0;
@@ -452,31 +470,31 @@ void save_grille(FILE *fichier, char *save, char **plateau) {
     }
 }
 
+//Lecture du fichier des données du joueur
 void lire_DonneesJoueur(char *save, DonneesJoueur *joueur) {
     FILE *fichier = NULL;
     fichier = fopen(save, "r");
 
     if (fichier != NULL) {
-        fscanf(fichier, "%d %d %d %d %d %d %d", &joueur->compteurTemps, &joueur->compteurMonnaie, &joueur->mode_jeux,
-               &joueur->nombreDHabitants, &joueur->capaciteEau, &joueur->capaciteElectrique, &joueur->nb_sommet);
+        fscanf(fichier, "%d %d %d %d %d %d %d", &joueur->compteurTemps, &joueur->compteurMonnaie, &joueur->mode_jeux, &joueur->nombreDHabitants, &joueur->capaciteEau, &joueur->capaciteElectrique, &joueur->nb_sommet);
     }
     fclose(fichier);
 }
 
+//Sauvegarde des données du joueur
 void save_DonneesJoueur(char *save, DonneesJoueur *joueur) {
     FILE *fichier = NULL;
     fichier = fopen(save, "w");
 
     if (fichier != NULL) {
 
-        fprintf(fichier, "%d\n%d\n%d\n%d\n%d\n%d\n%d\n", joueur->compteurTemps, joueur->compteurMonnaie,
-                joueur->mode_jeux, joueur->nombreDHabitants, joueur->capaciteEau, joueur->capaciteElectrique,
-                joueur->nb_sommet);
+        fprintf(fichier, "%d\n%d\n%d\n%d\n%d\n%d\n%d\n", joueur->compteurTemps, joueur->compteurMonnaie, joueur->mode_jeux, joueur->nombreDHabitants, joueur->capaciteEau, joueur->capaciteElectrique, joueur->nb_sommet);
 
         fclose(fichier);
     }
 }
 
+//Affichage de la boîte à outils
 void afficherMenu() {
     int i, j;
     locate(100, 2);
@@ -499,6 +517,7 @@ void afficherMenu() {
     color(15,0);
 }
 
+//Affichage des différents éléments que le joueur peut placer
 void choixElement() {
     locate(100, 11);
     printf("Quelle element voulez-vous placer ? \n");
@@ -513,10 +532,11 @@ void choixElement() {
     locate(100, 16);
 }
 
+//Fonction pour la route
 void route(int *preds, char **plateau, int choix, DonneesJoueur *joueur, Construction *construction, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
     choix = 1;
     do {
-        if (joueur->compteurMonnaie >= construction->cout) {
+        if (joueur->compteurMonnaie >= construction->cout) { // Si le joueur à l'argent nécessaire
             locate(100, 20);
             printf("                                            ");
             locate(100, 21);
@@ -529,9 +549,8 @@ void route(int *preds, char **plateau, int choix, DonneesJoueur *joueur, Constru
             printf("                                            ");
             locate(100, 25);
             printf("                                            ");
-            saisir_coordonnees(construction);
-            valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau,
-                              listeCentraleelec);
+            saisir_coordonnees(construction); // Le joueur saisit les coordonnées
+            valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec); // Validation des coordonnées
             locate(100, 23);
             color(12,0);
             printf("Souhaitez-vous placer une autre route ?\n\r");
@@ -543,21 +562,22 @@ void route(int *preds, char **plateau, int choix, DonneesJoueur *joueur, Constru
             printf("                                            ");
             locate(100, 24);
             printf("                                            ");
-        } else {
+        } else { // Si le joueur manque d'argent
             locate(100, 23);
             color(4,0);
             printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
             sleep(3);
         }
-    } while (choix == 1);
+    } while (choix == 1); // Tant que le joueur veut placer des routes
     color(15,0);
 }
 
+//Fonction pour le terrain vague
 void terrainVague(int *preds, char **plateau, DonneesJoueur *joueur, Construction *construction, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
-    if (joueur->compteurMonnaie >= construction->cout) {
-        saisir_coordonnees(construction);
-        valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
-    } else {
+    if (joueur->compteurMonnaie >= construction->cout) { // Si le joueur à l'agent nécessaire
+        saisir_coordonnees(construction); // Il saisit les coordonnées
+        valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec); // On valide les coordonnées
+    } else { // S'il n'a pas l'argent
         locate(100, 23);
         color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
@@ -566,11 +586,12 @@ void terrainVague(int *preds, char **plateau, DonneesJoueur *joueur, Constructio
     color(15,0);
 }
 
+//Fonction pour le château d'eau
 void chateauDeau(int *preds, char **plateau, DonneesJoueur *joueur, Construction *construction, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
-    if (joueur->compteurMonnaie >= construction->cout) {
-        saisir_coordonnees(construction);
-        valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
-    } else {
+    if (joueur->compteurMonnaie >= construction->cout) { // Si le joueur à l'agent nécessaire
+        saisir_coordonnees(construction); // Il saisit les coordonnées
+        valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec); // On valide les coordonnées
+    } else { // S'il n'a pas l'argent
         locate(100, 23);
         color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
@@ -579,11 +600,12 @@ void chateauDeau(int *preds, char **plateau, DonneesJoueur *joueur, Construction
     color(15,0);
 }
 
+//Fonction pour la centrale électrique
 void centraleElectrique(int *preds, char **plateau, DonneesJoueur *joueur, Construction *construction, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
-    if (joueur->compteurMonnaie >= construction->cout) {
-        saisir_coordonnees(construction);
-        valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
-    } else {
+    if (joueur->compteurMonnaie >= construction->cout) { // Si le joueur à l'agent nécessaire
+        saisir_coordonnees(construction); // Il saisit les coordonnées
+        valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec); // On valide les coordonnées
+    } else { // S'il n'a pas l'argent
         locate(100, 23);
         color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
@@ -592,30 +614,30 @@ void centraleElectrique(int *preds, char **plateau, DonneesJoueur *joueur, Const
     color(15,0);
 }
 
+//Fonction qui lance la fonction qui place une certaine construction en fonction du choix du joueur
 void afficherElement(int *preds, char **plateau, int choix, DonneesJoueur *joueur, Construction *construction, int **sommet, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
     scanf("%d", &construction->choixBatiment);
     switch (construction->choixBatiment) {
-        case 1: {
+        case 1: { // S'il veut placer une route
             route(preds, plateau, choix, joueur, construction, sommet, listeMaison, listeChateau, listeCentraleelec);
             break;
         }
-        case 2: {
+        case 2: { // S'il veut placer un terrain vague
             terrainVague(preds, plateau, joueur, construction, sommet, listeMaison, listeChateau, listeCentraleelec);
             break;
         }
-        case 3: {
-
-            centraleElectrique(preds, plateau, joueur, construction, sommet, listeMaison, listeChateau,
-                               listeCentraleelec);
+        case 3: { // S'il veut placer une centrale électrique
+            centraleElectrique(preds, plateau, joueur, construction, sommet, listeMaison, listeChateau, listeCentraleelec);
             break;
         }
-        case 4: {
+        case 4: { // S'il veut placer un château d'eau
             chateauDeau(preds, plateau, joueur, construction, sommet, listeMaison, listeChateau, listeCentraleelec);
             break;
         }
     }
 }
 
+//Fonction qui affiche en continue les données du joueur qui se situent en bas à droite de l'écran
 void afficherRessource(DonneesJoueur *joueur, Chateaueau listeChateau[], Centraleelec listeCentraleelec[]) {
     locate(92, 30);
     color(11, 0);

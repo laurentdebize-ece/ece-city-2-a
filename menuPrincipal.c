@@ -6,11 +6,13 @@ void menuPrincipal(){
     int choixMenu = 0;
 
     locate(100, 20);
+    color(15,12);
     printf("ECE CITY");
     getch();
     locate(90, 10);
     printf("QUE VOULEZ VOUS FAIRE ?");
     locate(74, 14);
+    color(12, 0);
     printf("1.MODE COMMUNISTE");
     locate(110, 14);
     printf("2.MODE CAPITALISTE");
@@ -22,6 +24,7 @@ void menuPrincipal(){
     scanf("%d", &choixMenu);
     //getch();
 
+    color(15,0);
     switch (choixMenu) {
         case 1 :{
             locate(90, 32);

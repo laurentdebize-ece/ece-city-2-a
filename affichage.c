@@ -187,6 +187,7 @@ void creerTableau(char **plateau) {
 //Fonction qui permet la saisie des coordonnées de nos constructions et routes
 void saisir_coordonnees(Construction* construction) {
     locate(100,18); // Localisation du texte sur l'écran
+    color(8, 0);
     printf("Saisissez des coordonnees :\n");
     int ret, continuer;
     do{
@@ -218,6 +219,7 @@ void saisir_coordonnees(Construction* construction) {
             ret = getchar();
 
     }while(continuer);
+    color(15, 0);
 
 }
 
@@ -420,7 +422,6 @@ void afficherPlateau(char **plateau) {
     printf("\n");
     system("cls");
     locate(1,1);
-    //color(5, 0);
     printf("          5         10        15        20        25        30        35        40        45\n");
     for (i = 0; i < nbLignes; i++) {
         if (i + 1 < 10) {
@@ -430,7 +431,14 @@ void afficherPlateau(char **plateau) {
         }
 
         for (j = 0; j < nbColonnes; j++) {
+            if(plateau[i][j] == 'U') {
+                color(6,0);
+            }
+            if(plateau[i][j] == 'E') {
+                color(9,0);
+            }
             printf("%c ", plateau[i][j]);
+            color(15, 0);
         }
         printf("\n");
     }
@@ -530,6 +538,7 @@ void save_listeCentraleelec(char* save, DonneesJoueur *joueur,Centraleelec liste
         fclose(fichier);
     }
 }
+
 void save_listeMaison(char* save, DonneesJoueur *joueur,Maison listeMaison[]) {
     FILE* fichier = NULL;
     fichier = fopen(save, "w");
@@ -597,6 +606,7 @@ void lire_sommet(char* save, DonneesJoueur *joueur, int** sommet) {
         fclose(fichier);
     }
 }
+
 void lire_listeChateau(char* save, DonneesJoueur *joueur,Chateaueau listeChateau[]) {
     FILE* fichier = NULL;
     fichier = fopen(save, "r");
@@ -645,8 +655,10 @@ void lire_listeMaison(char* save, DonneesJoueur *joueur,Maison listeMaison[]) {
 void afficherMenu() {
     int i, j;
     locate(100,1);
+    color(0,13);
     printf("Boite a outils : \n");
     locate(100,2);
+    color(13, 0);
     printf("- 0 : lire la notice \n");
     locate(100,3);
     printf("- 1 : restaurer une sauvegarde \n");
@@ -661,6 +673,7 @@ void afficherMenu() {
     locate(100,8);
     printf("- 6 : Sortir du jeux \n");
     locate(100,9);
+    color(15, 0);
 
 }
 
@@ -701,6 +714,7 @@ void route(int* preds, char** plateau, int choix, DonneesJoueur *joueur, Constru
             saisir_coordonnees(construction);
             valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
             locate(100,23);
+            color(12,0);
             printf("Souhaitez-vous placer une autre route ?\n\r");
             locate(100,24);
             printf("(1) Oui      (2) Non\n\r");
@@ -713,11 +727,13 @@ void route(int* preds, char** plateau, int choix, DonneesJoueur *joueur, Constru
         }
         else{
             locate(100,23);
+            color(4,0);
             printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
             Sleep(2000);
             choix = 2;// on sort du while si plus assez de ECEflouz
         }
     } while (choix == 1); // Tant que le joueur veut placer des routes
+    color(15, 0);
 }
 
 
@@ -729,9 +745,11 @@ void terrainVague(int* preds, char** plateau, DonneesJoueur *joueur, Constructio
     }
     else{ // S'il n'a pas l'argent
         locate(100,23);
+        color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire un terrain vague !\n\r");
         Sleep(2000);
     }
+    color(15, 0);
 }
 
 
@@ -743,9 +761,11 @@ void chateauDeau(int* preds, char** plateau, DonneesJoueur *joueur, Construction
     }
     else{
         locate(100,23);
+        color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire un chateau d'eau !\n\r");
         Sleep(2000);
     }
+    color(15, 0);
 }
 
 
@@ -757,9 +777,11 @@ void centraleElectrique(int* preds, char** plateau, DonneesJoueur *joueur, Const
     }
     else{
         locate(100,23);
+        color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une centrale electrique !\n\r");
         Sleep(2000);
     }
+    color(15,0);
 }
 
 
@@ -792,6 +814,7 @@ void afficherElement(int* preds, char** plateau, int choix, DonneesJoueur *joueu
 //Fonction qui affiche en continue les données du joueur qui se situent en bas à droite de l'écran
 void afficherRessource(DonneesJoueur *joueur, Chateaueau listeChateau[], Centraleelec listeCentraleelec[]){
     locate(92,30);
+    color(11, 0);
     printf(" Compteur temporel :  %ld s   ",joueur->compteurTemps);
     locate(92,31);
     printf(" Monnaie :  %d   ",joueur->compteurMonnaie);
@@ -805,6 +828,7 @@ void afficherRessource(DonneesJoueur *joueur, Chateaueau listeChateau[], Central
     for (int i = 0; i < joueur->nb_chateaueau; i++){
         printf(" n%d %d/5000 :",i+1,listeChateau[i].capa);
     }
+    color(15, 0);
 }
 
 

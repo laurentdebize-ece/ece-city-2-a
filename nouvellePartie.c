@@ -4,6 +4,7 @@ void nouvellePartie(){
 
     int** sommet = NULL;
 
+
     char** plateau = NULL;
     char** niveaueau = NULL;
     char** niveauelec = NULL;
@@ -11,10 +12,12 @@ void nouvellePartie(){
     int choix2 = 0;
     FILE* fichier = NULL;
 
+
     Chateaueau listeChateau[20];
     Maison listeMaison[30];
     Centraleelec listeCentraleelec[30];
     Habitat listeHabitat[5];
+
 
     clock_t t1, t2;
     t1 = clock();
@@ -25,6 +28,7 @@ void nouvellePartie(){
 
     initialisationJoueur(&joueur);
     initialisationConstruction(&construction);
+
 
     AllouerTableau(&plateau);
     AllouerTableau(&niveaueau);
@@ -54,6 +58,7 @@ void nouvellePartie(){
     int s0;
     int *preds2=(int*)malloc(g->ordre*sizeof(int));
 
+
     while (choix != '6'){
         check_time_15(&majclock, &joueur);
         if (majclock.majdon == 1){
@@ -62,6 +67,7 @@ void nouvellePartie(){
             afficherPlateau(plateau);
             afficherMenu();
         }
+
 
         //t1=check_time_15(t1, t2, &joueur);
         fflush (stdout);
@@ -109,6 +115,7 @@ void nouvellePartie(){
                 }
                 case '4' :{
                     int clavier = 0;
+                    creerTableau(niveaueau);
                     majniveaueau(&joueur,niveaueau,sommet,listeMaison,listeChateau);
                     afficherPlateau(niveaueau);
                     checkmanqueeau(&joueur,listeMaison,listeChateau);
@@ -130,6 +137,7 @@ void nouvellePartie(){
                 }
                 case '5' :{
                     int clavier = 0;
+                    creerTableau(niveaueau);
                     majniveauelec(&joueur,niveauelec,sommet,listeMaison,listeCentraleelec);
                     afficherPlateau(niveauelec);
                     checkmanqueelec(&joueur, listeMaison);

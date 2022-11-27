@@ -187,7 +187,6 @@ void creerTableau(char **plateau) {
 //Fonction qui permet la saisie des coordonnées de nos constructions et routes
 void saisir_coordonnees(Construction* construction) {
     locate(100,18); // Localisation du texte sur l'écran
-    color(8, 0);
     printf("Saisissez des coordonnees :\n");
     int ret, continuer;
     do{
@@ -219,7 +218,6 @@ void saisir_coordonnees(Construction* construction) {
             ret = getchar();
 
     }while(continuer);
-    color(15, 0);
 
 }
 
@@ -432,14 +430,7 @@ void afficherPlateau(char **plateau) {
         }
 
         for (j = 0; j < nbColonnes; j++) {
-            if(plateau[i][j] == 'U') {
-                color(6,0);
-            }
-            if(plateau[i][j] == 'E') {
-                color(9,0);
-            }
             printf("%c ", plateau[i][j]);
-            color(15, 0);
         }
         printf("\n");
     }
@@ -498,6 +489,8 @@ void save_DonneesJoueur(char* save, DonneesJoueur *joueur) {
     }
 }
 
+
+//Sauvegarde des sommets
 void save_sommet(char* save, DonneesJoueur *joueur, int** sommet) {
     FILE* fichier = NULL;
     fichier = fopen(save, "w");
@@ -510,6 +503,8 @@ void save_sommet(char* save, DonneesJoueur *joueur, int** sommet) {
     }
 }
 
+
+//Sauvegarde de la liste des chateaux d'eau
 void save_listeChateau(char* save, DonneesJoueur *joueur,Chateaueau listeChateau[]) {
     FILE* fichier = NULL;
     fichier = fopen(save, "w");
@@ -525,6 +520,8 @@ void save_listeChateau(char* save, DonneesJoueur *joueur,Chateaueau listeChateau
     }
 }
 
+
+//Sauvegarde de la liste des centrales electriques
 void save_listeCentraleelec(char* save, DonneesJoueur *joueur,Centraleelec listeCentraleelec[]) {
     FILE* fichier = NULL;
     fichier = fopen(save, "w");
@@ -540,6 +537,8 @@ void save_listeCentraleelec(char* save, DonneesJoueur *joueur,Centraleelec liste
     }
 }
 
+
+//Sauvegarde de la liste des maisons
 void save_listeMaison(char* save, DonneesJoueur *joueur,Maison listeMaison[]) {
     FILE* fichier = NULL;
     fichier = fopen(save, "w");
@@ -596,6 +595,8 @@ void lire_DonneesJoueur(char* save, DonneesJoueur *joueur) {
     fclose(fichier);
 }
 
+
+//Lecture du fichier des sommets
 void lire_sommet(char* save, DonneesJoueur *joueur, int** sommet) {
     FILE* fichier = NULL;
     fichier = fopen(save, "r");
@@ -608,6 +609,8 @@ void lire_sommet(char* save, DonneesJoueur *joueur, int** sommet) {
     }
 }
 
+
+//Lecture du fichier de la liste des chateau d'eau
 void lire_listeChateau(char* save, DonneesJoueur *joueur,Chateaueau listeChateau[]) {
     FILE* fichier = NULL;
     fichier = fopen(save, "r");
@@ -626,6 +629,8 @@ void lire_listeChateau(char* save, DonneesJoueur *joueur,Chateaueau listeChateau
 
 }
 
+
+//Lecture du fichier de la liste des centrales electriques
 void lire_listeCentraleelec(char* save, DonneesJoueur *joueur,Centraleelec listeCentraleelec[]) {
     FILE* fichier = NULL;
     fichier = fopen(save, "r");
@@ -641,6 +646,8 @@ void lire_listeCentraleelec(char* save, DonneesJoueur *joueur,Centraleelec liste
     }
 }
 
+
+//Lecture du fichier de la liste des maisons
 void lire_listeMaison(char* save, DonneesJoueur *joueur,Maison listeMaison[]) {
     FILE* fichier = NULL;
     fichier = fopen(save, "r");
@@ -656,10 +663,8 @@ void lire_listeMaison(char* save, DonneesJoueur *joueur,Maison listeMaison[]) {
 void afficherMenu() {
     int i, j;
     locate(100,1);
-    color(0,13);
     printf("Boite a outils : \n");
     locate(100,2);
-    color(13, 0);
     printf("- 0 : lire la notice \n");
     locate(100,3);
     printf("- 1 : restaurer une sauvegarde \n");
@@ -674,7 +679,6 @@ void afficherMenu() {
     locate(100,8);
     printf("- 6 : Sortir du jeux \n");
     locate(100,9);
-    color(15, 0);
 
 }
 
@@ -715,7 +719,6 @@ void route(int* preds, char** plateau, int choix, DonneesJoueur *joueur, Constru
             saisir_coordonnees(construction);
             valid_coordonnees(preds, plateau, construction, joueur, sommet, listeMaison, listeChateau, listeCentraleelec);
             locate(100,23);
-            color(12,0);
             printf("Souhaitez-vous placer une autre route ?\n\r");
             locate(100,24);
             printf("(1) Oui      (2) Non\n\r");
@@ -728,13 +731,11 @@ void route(int* preds, char** plateau, int choix, DonneesJoueur *joueur, Constru
         }
         else{
             locate(100,23);
-            color(4,0);
             printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une route !\n\r");
             Sleep(2000);
             choix = 2;// on sort du while si plus assez de ECEflouz
         }
     } while (choix == 1); // Tant que le joueur veut placer des routes
-    color(15, 0);
 }
 
 
@@ -746,11 +747,9 @@ void terrainVague(int* preds, char** plateau, DonneesJoueur *joueur, Constructio
     }
     else{ // S'il n'a pas l'argent
         locate(100,23);
-        color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire un terrain vague !\n\r");
         Sleep(2000);
     }
-    color(15, 0);
 }
 
 
@@ -762,11 +761,9 @@ void chateauDeau(int* preds, char** plateau, DonneesJoueur *joueur, Construction
     }
     else{
         locate(100,23);
-        color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire un chateau d'eau !\n\r");
         Sleep(2000);
     }
-    color(15, 0);
 }
 
 
@@ -778,11 +775,9 @@ void centraleElectrique(int* preds, char** plateau, DonneesJoueur *joueur, Const
     }
     else{
         locate(100,23);
-        color(4,0);
         printf("Desole ! Vous n'avez pas assez d'ECEflouz pour construire une centrale electrique !\n\r");
         Sleep(2000);
     }
-    color(15,0);
 }
 
 
@@ -814,22 +809,20 @@ void afficherElement(int* preds, char** plateau, int choix, DonneesJoueur *joueu
 
 //Fonction qui affiche en continue les données du joueur qui se situent en bas à droite de l'écran
 void afficherRessource(DonneesJoueur *joueur, Chateaueau listeChateau[], Centraleelec listeCentraleelec[]){
-    locate(100,30);
-    color(11, 0);
+    locate(92,30);
     printf(" Compteur temporel :  %ld s   ",joueur->compteurTemps);
-    locate(100,31);
+    locate(92,31);
     printf(" Monnaie :  %d   ",joueur->compteurMonnaie);
-    locate(100,32);
-    printf(" Nombre d'habitants : %d ",joueur->nombreDHabitants);
-    locate(100,33);
-    printf(" Capacite electrique : %d ",joueur->capaciteElectrique);
-    locate(100,34);
+    locate(92,32);
+    printf(" Nb Habitants : %d ",joueur->nombreDHabitants);
+    locate(92,33);
+    printf(" Capacite electrique : %d/%d ",joueur->capaciteElectrique, joueur->nb_centraleelec*5000);
+    locate(92,34);
     printf(" Capacite eau :");
     locate(107,34);
     for (int i = 0; i < joueur->nb_chateaueau; i++){
         printf(" n%d %d/5000 :",i+1,listeChateau[i].capa);
     }
-    color(15, 0);
 }
 
 
@@ -844,7 +837,7 @@ int checksommet(DonneesJoueur *joueur, int x,int y, int** sommet) {
 }
 
 
-
+/*
 void majdonnees(DonneesJoueur *joueur, char** plateau, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[],Habitat listeHabitat[]){
     int eaudispo1=0;
     int eaudispo2=0;
@@ -957,11 +950,9 @@ void majdonnees(DonneesJoueur *joueur, char** plateau, Maison listeMaison[], Cha
                         }
                         for (int i = 0; i < 5; i++)
                         {
-                            if (listeHabitat[i].type == checktype)
-                                //{
-                                /*if (listeHabitat[i].type != 'T')*/
+                            if (listeHabitat[i].type == checktype){
                                 predtype=listeHabitat[i-1].type;
-                            //}
+                            }
                         }
                         checktype=predtype;
                     }
@@ -980,7 +971,6 @@ void majdonnees(DonneesJoueur *joueur, char** plateau, Maison listeMaison[], Cha
                     listeMaison[nummaison].nbhab=listeMaison[nummaison].nbhab+eaudispo2;
                     joueur->capaciteElectrique = joueur->capaciteElectrique - eaudispo2;
                     joueur->nombreDHabitants = joueur->nombreDHabitants + eaudispo2;
-                    listeChateau[listeMaison[nummaison].eau1].capa=0;
                     checktype=listeMaison[nummaison].type;
                     while (checktype != 'T'){
                         for (int nummaisoneau = 0; nummaisoneau < joueur->nb_maison; nummaisoneau++) {
@@ -1109,11 +1099,9 @@ void majdonnees(DonneesJoueur *joueur, char** plateau, Maison listeMaison[], Cha
                         }
                         for (int i = 0; i < 5; i++)
                         {
-                            if (listeHabitat[i].type == checktype)
-                                //{
-                                /*if (listeHabitat[i].type != 'T')*/
+                            if (listeHabitat[i].type == checktype){
                                 predtype=listeHabitat[i-1].type;
-                            //}
+                            }
                         }
                         checktype=predtype;
                     }
@@ -1125,7 +1113,278 @@ void majdonnees(DonneesJoueur *joueur, char** plateau, Maison listeMaison[], Cha
 
                         }
                     }
-                    Sleep(3000);
+                }
+            }
+
+        }
+    }
+}
+*/
+void majdonnees(DonneesJoueur *joueur, char** plateau, Maison listeMaison[], Chateaueau listeChateau[], Centraleelec listeCentraleelec[],Habitat listeHabitat[]){
+    int eaudispo1=0;
+    int eaudispo2=0;
+    int elecdispo=0;
+    int sommeeau = 0;
+    int nexthab,actuhab,nexteau,actueau1use,actueau2use,actuelec,nextelec,resthab;
+    char predtype,checktype,typeactu,nexttype;
+    joueur->compteurMonnaie = joueur->compteurMonnaie + (10 * joueur->nombreDHabitants);
+    for (int nummaison = 0; nummaison < joueur->nb_maison; nummaison++) {
+        typeactu=listeMaison[nummaison].type;
+        actuhab=listeMaison[nummaison].nbhab;
+
+        if (typeactu != 'G' && listeMaison[nummaison].eau1 != 99 && listeMaison[nummaison].elec != 99)
+        {
+            for (int i = 0; i < 5; i++){
+                if (listeHabitat[i].type == typeactu)
+                {
+                    nexttype = listeHabitat[i+1].type;
+                    actuelec = listeHabitat[i].nbhabitant;
+
+                    nexthab = listeHabitat[i+1].nbhabitant;
+                    nexteau = nexthab;
+                    nextelec = nexthab;
+                }
+            }
+            // on regarde la dispo en eau et electricite
+            if (listeMaison[nummaison].eau1 != 99) eaudispo1=listeChateau[listeMaison[nummaison].eau1].capa;
+            if (listeMaison[nummaison].eau2 != 99) eaudispo2=listeChateau[listeMaison[nummaison].eau1].capa;
+            if (listeMaison[nummaison].elec != 99) elecdispo=joueur->capaciteElectrique;
+            //si il y a un peu d'eau et l'equivalent d'electricitenecessaire , on peut chnager le type
+
+            if ((eaudispo1 + eaudispo2) > 0 && elecdispo >= nextelec-actuelec )
+            { // On est dans le cas ou on peut pas faire evoluer le type;
+                actueau1use=listeMaison[nummaison].capaeau1use;
+                if (nexteau <= eaudispo1-actuhab)
+                {//on a l'eau et l'electricite pour changer le typ et remplir le nouveau type
+                    listeMaison[nummaison].type=nexttype;
+                    listeMaison[nummaison].nbhabmax=nexthab;
+                    listeMaison[nummaison].nbhab=nexthab;
+                    listeMaison[nummaison].capaeau1use=listeMaison[nummaison].capaeau1use+nexthab-actueau1use;
+                    listeChateau[listeMaison[nummaison].eau1].capa=listeChateau[listeMaison[nummaison].eau1].capa-listeMaison[nummaison].capaeau1use+actueau1use;
+                    joueur->capaciteElectrique = joueur->capaciteElectrique - nexthab + actuelec;
+                    joueur->nombreDHabitants = joueur->nombreDHabitants + nexthab - actuhab;
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 3; j++) {
+                            plateau[listeMaison[nummaison].x-i-1][listeMaison[nummaison].y+j-1] = listeMaison[nummaison].type;
+
+                        }
+                    }
+                }
+                else
+                {
+                    if (eaudispo1 > 0)
+                        // on alimente partiellement avec le chateau 1
+                    {
+                        listeMaison[nummaison].type=nexttype;
+                        listeMaison[nummaison].nbhabmax=nexthab;
+                        listeMaison[nummaison].nbhab=listeMaison[nummaison].nbhab+eaudispo1;
+                        resthab=nexthab-eaudispo1+actuhab;
+                        listeMaison[nummaison].capaeau1use=listeMaison[nummaison].capaeau1use+eaudispo1;
+                        listeChateau[listeMaison[nummaison].eau1].capa=listeChateau[listeMaison[nummaison].eau1].capa-listeMaison[nummaison].capaeau1use+actueau1use;
+                        joueur->capaciteElectrique = joueur->capaciteElectrique - nexthab + actuelec;
+                        joueur->nombreDHabitants = joueur->nombreDHabitants + eaudispo1;
+                        for (int i = 0; i < 3; i++) {
+                            for (int j = 0; j < 3; j++) {
+                                plateau[listeMaison[nummaison].x-i-1][listeMaison[nummaison].y+j-1] = listeMaison[nummaison].type;
+
+                            }
+                        }
+                    }
+                    if (eaudispo2 > 0 && listeMaison[nummaison].eau2 != 99)
+                    {
+                        // on alimente partiellement le reste avec le chateau 2
+                        if(eaudispo2 >= resthab)
+                        {
+                            listeMaison[nummaison].nbhab=listeMaison[nummaison].nbhab+resthab;
+                            listeMaison[nummaison].capaeau2use=listeMaison[nummaison].capaeau2use+resthab;
+                            listeChateau[listeMaison[nummaison].eau2].capa=listeChateau[listeMaison[nummaison].eau2].capa-listeMaison[nummaison].capaeau2use+resthab;
+                            joueur->nombreDHabitants = joueur->nombreDHabitants + resthab;
+                        }
+                        else
+                        {
+                            listeMaison[nummaison].nbhab=listeMaison[nummaison].nbhab+eaudispo2;
+                            listeMaison[nummaison].capaeau2use=listeMaison[nummaison].capaeau2use+eaudispo2;
+                            listeChateau[listeMaison[nummaison].eau2].capa=listeChateau[listeMaison[nummaison].eau2].capa-listeMaison[nummaison].capaeau2use+eaudispo2;
+                            joueur->nombreDHabitants = joueur->nombreDHabitants + eaudispo2;
+                        }
+                    }
+                }
+            }
+            else{
+                int capatotaleaudispo = 0 ;
+                int capatotalelecdispo = 0;
+                // on regarde si on peut reiquilibrer l'eau
+                // si l'on a de l'eau  de dispo et que l'elec est connetee
+                if ((eaudispo1 + eaudispo2) > 0 && elecdispo >= 0)
+                {
+                    //On fait la somme de l'eau des types inferieurs ou egales
+                    checktype=listeMaison[nummaison].type;
+                    while (checktype != 'T'){
+                        for (int nummaisoneau = 0; nummaisoneau < joueur->nb_maison; nummaisoneau++) {
+                            if (listeMaison[nummaisoneau].type==checktype){
+                                if (listeMaison[nummaisoneau].eau1 == listeMaison[nummaison].eau1 || listeMaison[nummaisoneau].eau1 == listeMaison[nummaison].eau2)
+                                    capatotaleaudispo = listeMaison[nummaisoneau].capaeau1use + capatotaleaudispo;
+                                if ((listeMaison[nummaisoneau].eau2 == listeMaison[nummaison].eau1 || listeMaison[nummaisoneau].eau2 == listeMaison[nummaison].eau2)&&listeMaison[nummaisoneau].eau2 !=99)
+                                    capatotaleaudispo = listeMaison[nummaisoneau].capaeau2use + capatotaleaudispo;
+                                capatotalelecdispo = capatotalelecdispo + listeMaison[nummaisoneau].nbhabmax;
+                            }
+                        }
+                        for (int i = 0; i < 5; i++)
+                        {
+                            if (listeHabitat[i].type == checktype)
+                                //{
+                                predtype=listeHabitat[i-1].type;
+                            //}
+                        }
+                        checktype=predtype;
+                    }
+                }
+                if (capatotaleaudispo + eaudispo1 + eaudispo2>= nexteau && capatotalelecdispo+joueur->capaciteElectrique >=nexteau )
+                {
+                    // On peut reiquilibrer
+                    int eauarecup;
+                    eauarecup=nexteau-eaudispo1-eaudispo2-listeMaison[nummaison].capaeau1use-listeMaison[nummaison].capaeau2use;
+                    listeMaison[nummaison].nbhab=listeMaison[nummaison].nbhab+eaudispo1;
+                    joueur->nombreDHabitants = joueur->nombreDHabitants + eaudispo1;
+                    joueur->capaciteElectrique = joueur->capaciteElectrique - eaudispo1;
+                    listeChateau[listeMaison[nummaison].eau1].capa=0;
+                    listeMaison[nummaison].nbhab=listeMaison[nummaison].nbhab+eaudispo2;
+                    joueur->capaciteElectrique = joueur->capaciteElectrique - eaudispo2;
+                    joueur->nombreDHabitants = joueur->nombreDHabitants + eaudispo2;
+                    checktype=listeMaison[nummaison].type;
+                    while (checktype != 'T'){
+                        for (int nummaisoneau = 0; nummaisoneau < joueur->nb_maison; nummaisoneau++) {
+                            // Je regarde deja si la maison est pas celle que j'essaye de faire evoluer
+                            if (listeMaison[nummaisoneau].nummaison != listeMaison[nummaison].nummaison)
+                            {
+                                if (listeMaison[nummaisoneau].type==checktype){
+                                    // on bascule les habitants et l'eau
+                                    //   nexteau
+                                    //  actuhab //idem eau actuelle
+                                    if (listeMaison[nummaisoneau].eau2 == listeMaison[nummaison].eau1)
+                                    {
+                                        if (listeMaison[nummaisoneau].capaeau2use <= eauarecup)
+                                        {// Si l'on prend totalement l'eau
+                                            listeMaison[nummaison].capaeau1use=listeMaison[nummaison].capaeau1use+listeMaison[nummaisoneau].capaeau2use;
+                                            listeMaison[nummaison].nbhab = listeMaison[nummaison].nbhab + listeMaison[nummaisoneau].capaeau2use;
+                                            listeMaison[nummaisoneau].nbhab = listeMaison[nummaisoneau].nbhab - listeMaison[nummaisoneau].capaeau2use;
+                                            listeChateau[listeMaison[nummaisoneau].eau2].listeMaisonconnecteau[nummaisoneau].nummaison = 99;
+                                            listeChateau[listeMaison[nummaisoneau].eau2].listeMaisonconnecteau[nummaisoneau].distance = 99;
+                                            eauarecup=eauarecup-listeMaison[nummaisoneau].capaeau2use;
+                                            listeMaison[nummaisoneau].capaeau2use=0;
+                                            listeMaison[nummaisoneau].disteau2 = 0;
+                                            listeMaison[nummaisoneau].eau2 = 99;
+                                        }
+                                        else{// Si l'on prend partiellment l'eau
+                                            listeMaison[nummaison].capaeau1use=listeMaison[nummaison].capaeau1use+eauarecup;
+                                            listeMaison[nummaison].nbhab = listeMaison[nummaison].nbhab + eauarecup;
+                                            listeMaison[nummaisoneau].nbhab = listeMaison[nummaisoneau].nbhab - eauarecup;
+                                            listeMaison[nummaisoneau].capaeau2use=listeMaison[nummaisoneau].capaeau2use-eauarecup;
+                                            eauarecup=0;
+                                            //ajout du reste des chateau a voir
+                                        }
+                                    }
+                                    if (eauarecup!=0 && listeMaison[nummaisoneau].eau2 == listeMaison[nummaison].eau2 && listeMaison[nummaison].eau2 != 99)
+                                    {
+                                        if (listeMaison[nummaisoneau].capaeau2use <= eauarecup)
+                                        {// Si l'on prend totalement l'eau
+                                            listeMaison[nummaison].capaeau2use=listeMaison[nummaison].capaeau2use+listeMaison[nummaisoneau].capaeau2use;
+                                            listeMaison[nummaison].nbhab = listeMaison[nummaison].nbhab + listeMaison[nummaisoneau].capaeau2use;
+                                            listeMaison[nummaisoneau].nbhab = listeMaison[nummaisoneau].nbhab - listeMaison[nummaisoneau].capaeau2use;
+                                            eauarecup = eauarecup-listeMaison[nummaisoneau].capaeau2use;
+                                            listeMaison[nummaisoneau].capaeau2use=0;
+                                            listeMaison[nummaisoneau].disteau2 = 0;
+                                            listeMaison[nummaisoneau].eau2 = 99;
+                                        }
+                                        else{// Si l'on prend partiellment l'eau
+                                            listeMaison[nummaison].capaeau2use=listeMaison[nummaison].capaeau2use+eauarecup;
+                                            listeMaison[nummaison].nbhab = listeMaison[nummaison].nbhab + eauarecup;
+                                            listeMaison[nummaisoneau].nbhab = listeMaison[nummaisoneau].nbhab - eauarecup;
+                                            listeMaison[nummaisoneau].capaeau2use=listeMaison[nummaisoneau].capaeau2use-eauarecup;
+                                            eauarecup=0;
+                                            //ajout du reste des chateau a voir
+                                        }
+
+                                    }
+                                    if (eauarecup!=0 && listeMaison[nummaisoneau].eau1 == listeMaison[nummaison].eau1 )
+                                    {
+
+                                        if (listeMaison[nummaisoneau].capaeau1use <= eauarecup)
+                                        {// Si l'on prend totalement l'eau
+                                            listeMaison[nummaison].capaeau1use=listeMaison[nummaison].capaeau1use+listeMaison[nummaisoneau].capaeau1use;
+                                            listeMaison[nummaison].nbhab = listeMaison[nummaison].nbhab + listeMaison[nummaisoneau].capaeau1use;
+                                            listeMaison[nummaisoneau].nbhab = listeMaison[nummaisoneau].nbhab - listeMaison[nummaisoneau].capaeau1use;
+                                            eauarecup=eauarecup-listeMaison[nummaisoneau].capaeau1use;
+                                            listeMaison[nummaisoneau].capaeau1use=0;
+                                            listeMaison[nummaisoneau].disteau1 = 0;
+                                            listeMaison[nummaisoneau].eau1 = 99;
+                                        }
+                                        else{// Si l'on prend partiellment l'eau
+                                            listeMaison[nummaison].capaeau1use=listeMaison[nummaison].capaeau1use+eauarecup;
+                                            listeMaison[nummaison].nbhab = listeMaison[nummaison].nbhab + eauarecup;
+                                            listeMaison[nummaisoneau].nbhab = listeMaison[nummaisoneau].nbhab - eauarecup;
+                                            listeMaison[nummaisoneau].capaeau1use=listeMaison[nummaisoneau].capaeau1use-eauarecup;
+                                            eauarecup=0;
+                                            //ajout du reste des chateau a voir
+                                        }
+                                    }
+                                    if (eauarecup!=0 && listeMaison[nummaisoneau].eau1 == listeMaison[nummaison].eau2)
+                                    {
+                                        if (listeMaison[nummaisoneau].capaeau1use <= eauarecup)
+                                        {// Si l'on prend totalement l'eau
+                                            listeMaison[nummaison].capaeau2use=listeMaison[nummaison].capaeau2use+listeMaison[nummaisoneau].capaeau1use;
+                                            listeMaison[nummaison].nbhab = listeMaison[nummaison].nbhab + listeMaison[nummaisoneau].capaeau1use;
+                                            listeMaison[nummaisoneau].nbhab = listeMaison[nummaisoneau].nbhab - listeMaison[nummaisoneau].capaeau1use;
+                                            eauarecup=eauarecup-listeMaison[nummaisoneau].capaeau1use;
+                                            listeMaison[nummaisoneau].capaeau1use=0;
+                                            listeMaison[nummaisoneau].disteau1 = 0;
+                                            listeMaison[nummaisoneau].eau1 = 99;
+                                        }
+                                        else{// Si l'on prend partiellment l'eau
+                                            listeMaison[nummaison].capaeau1use=listeMaison[nummaison].capaeau1use+eauarecup;
+                                            listeMaison[nummaison].nbhab = listeMaison[nummaison].nbhab + eauarecup;
+                                            listeMaison[nummaisoneau].nbhab = listeMaison[nummaisoneau].nbhab - eauarecup;
+                                            listeMaison[nummaisoneau].capaeau1use=listeMaison[nummaisoneau].capaeau1use-eauarecup;
+                                            eauarecup=0;
+                                            //ajout du reste des chateau a voir
+                                        }
+
+                                    }
+
+
+
+                                }
+                            }
+                            if (listeMaison[nummaisoneau].capaeau1use + listeMaison[nummaisoneau].capaeau2use == 0)
+                            {
+                                listeMaison[nummaisoneau].nbhabmax=0;
+                                listeMaison[nummaisoneau].type='T';
+                                for (int i = 0; i < 3; i++) {
+                                    for (int j = 0; j < 3; j++) {
+                                        plateau[listeMaison[nummaisoneau].x-i-1][listeMaison[nummaisoneau].y+j-1] = listeMaison[nummaisoneau].type;
+
+                                    }
+                                }
+
+                            }
+                        }
+                        for (int i = 0; i < 5; i++)
+                        {
+                            if (listeHabitat[i].type == checktype){
+
+                                predtype=listeHabitat[i-1].type;
+                            }
+                        }
+                        checktype=predtype;
+                    }
+                    listeMaison[nummaison].type=nexttype;
+                    listeMaison[nummaison].nbhabmax=nexteau;
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 3; j++) {
+                            plateau[listeMaison[nummaison].x-i-1][listeMaison[nummaison].y+j-1] = listeMaison[nummaison].type;
+
+                        }
+                    }
                 }
             }
 

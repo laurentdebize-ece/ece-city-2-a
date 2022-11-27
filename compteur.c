@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <time.h>
 #include "compteur.h"
 
@@ -15,7 +14,7 @@ paramclock check_time_15(paramclock *majclock, DonneesJoueur *joueur) {
     long check15;
     t2 = clock();
     check15 = timediff(t1, t2);
-    if (check15 >= 10) {
+    if (check15 >= 15) {
         majclock->majdon = 1;
         majclock->t1 = t2;
     }

@@ -4,18 +4,18 @@ void menuPrincipal(){
     FILE *fichier = NULL;
     int choixMenu = 0;
 
-    locate(100, 20);
+    locate(70, 5);
     printf("ECE CITY");
-    getch();
-    locate(90, 10);
+    //getch();
+    locate(64, 10);
     printf("QUE VOULEZ VOUS FAIRE ?");
-    locate(74, 14);
+    locate(52, 15);
     printf("1.MODE COMMUNISTE");
-    locate(110, 14);
+    locate(80, 15);
     printf("2.MODE CAPITALISTE");
-    locate(92, 20);
+    locate(67, 20);
     printf("3.REGLES DU JEU");
-    printf("\n");
+    //printf("\n");
     locate(92, 22);
     fflush(stdout);
     scanf("%d", &choixMenu);

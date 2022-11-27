@@ -1222,7 +1222,7 @@ void majniveauelec(DonneesJoueur *joueur, char** niveauelec, int** sommet,  Mais
         for (int x = 0; x < 6; x++) {
             for (int j = 0; j < 4; j++) {
                 //niveauelec[construction->x-i-1][construction->y+j-1] = 'U';
-                niveauelec[listeCentraleelec[numcentrale].x-1-x][listeCentraleelec[numcentrale].y+j-1] = 'E';
+                niveauelec[listeCentraleelec[numcentrale].x-1-x][listeCentraleelec[numcentrale].y+j-1] = 'U';
             }
         }
     }

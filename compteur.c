@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <time.h>
 #include "compteur.h"
 
 long timediff(clock_t t1, clock_t t2) {

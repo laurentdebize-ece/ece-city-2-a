@@ -350,21 +350,6 @@ void check_maison(int s0,DonneesJoueur *joueur,int** sommet, Maison listeMaison[
                         else{//si les 2 chateaux sont remplis , on regarde si celui qu'on essaye d'ajouter est plus proche
 
 
-                            //!!!!!!!!!!!! A ECRIRE !!!!!!!!!!!!!!!
-
-
-                            /*if listeMaison[nummaison].disteau1=nb_arrete > nb_arrete{
-                                eauchat1=listeMaison[nummaison].nbhab;
-                                listeChateau[numchateau].
-                                listeMaison[nummaison].eau1=
-                                listeMaison[nummaison].eau2=listeMaison[nummaison].eau1;
-                                listeMaison[nummaison].disteau2=listeMaison[nummaison].disteau1;
-                                listeMaison[nummaison].eau1=numchateau;
-                                listeMaison[nummaison].disteau1=nb_arrete;
-                                }
-                             else{
-
-                             } */
 
                         }
                     }
